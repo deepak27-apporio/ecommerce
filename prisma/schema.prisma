@@ -1,0 +1,161 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// user schema
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  gender    Gender
+  role      Role      @default(user)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  addresses Address[]
+  orders    Order[]
+}
+
+// product schema
+
+model Product {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String  @db.Text
+  price       Float
+  category    String
+  stock       Int     @default(0)
+  isActive    Boolean @default(true)
+
+  attachments ProductAttachment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductAttachment {
+  id        Int    @id @default(autoincrement())
+  fileId    String
+  url       String
+  provider  String
+  mimeType  String
+  size      Int
+  productId Int
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+// user address schema
+
+model Address {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName   String
+  phone      String
+  line1      String
+  line2      String?
+  city       String
+  state      String
+  postalCode String
+  country    String  @default("India")
+
+  orders Order[]
+
+  createdAt DateTime @default(now())
+}
+
+
+model Order {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  addressId Int
+  address   Address @relation(fields: [addressId], references: [id])
+
+  totalAmount Float
+  tax         Float
+  shipping    Float
+  subtotal    Float
+  currency    String @default("INR")
+
+  status OrderStatus @default(CREATED)
+
+  razorpayOrderId String? @unique
+
+  items   OrderItem[]
+  payment Payment?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id      Int   @id @default(autoincrement())
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId   Int
+  productName String
+  productImages String
+  productCategory String
+
+  quantity Int
+  price    Int
+}
+
+model Payment {
+  id      Int   @id @default(autoincrement())
+  orderId Int   @unique
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  razorpayPaymentId String @unique
+  razorpayOrderId   String
+  razorpaySignature String
+
+  amount   Int
+  currency String @default("INR")
+
+  status PaymentStatus
+  method String?
+
+  createdAt DateTime @default(now())
+}
+
+enum Gender {
+  male
+  female
+}
+
+enum Role {
+  admin
+  user
+}
+
+enum OrderStatus {
+  CREATED
+  PAID
+  FAILED
+  SHIPPED
+  DELIVERED
+}
+
+enum PaymentStatus {
+  SUCCESS
+  FAILED
+}
