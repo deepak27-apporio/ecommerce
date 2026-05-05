@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Header from "./components/Header";
+import { Toaster } from "react-hot-toast";
+import { AppProvider } from "./context";
+import Footer from "./components/Footer";
+import Script from "next/script";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
   subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 const geistMono = Geist_Mono({
@@ -27,7 +32,18 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <AppProvider>
+        <body className="min-h-full flex flex-col bg-white!">
+          <Header />
+          {children}
+          <Footer />
+          <Toaster position="top-center" />
+          <Script
+            src="https://checkout.razorpay.com/v1/checkout.js"
+            strategy="lazyOnload"
+          />
+        </body>
+      </AppProvider>
     </html>
   );
 }
