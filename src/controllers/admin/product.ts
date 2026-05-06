@@ -4,6 +4,7 @@ import ErrorHandler from "../../utils/errorClass.js";
 import { storage } from "../../utils/storage.js";
 import { tryCatch } from "../../middlewares/errorHandler.js";
 import { StatusCodes } from "../../utils/apiResponse.js";
+// import Anthropic from "@anthropic-ai/sdk";
 
 export const addProduct = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -12,11 +13,18 @@ export const addProduct = tryCatch(
     const files = req.files as Express.Multer.File[];
 
     if (!files || files.length === 0) {
-      return next(new ErrorHandler("At least one image is required", StatusCodes.BAD_REQUEST));
+      return next(
+        new ErrorHandler(
+          "At least one image is required",
+          StatusCodes.BAD_REQUEST,
+        ),
+      );
     }
 
     if (files.length > 5) {
-      return next(new ErrorHandler("Max 5 images allowed", StatusCodes.BAD_REQUEST));
+      return next(
+        new ErrorHandler("Max 5 images allowed", StatusCodes.BAD_REQUEST),
+      );
     }
 
     const uploadFiles = files.map((file) => ({
@@ -66,7 +74,9 @@ export const updateProduct = tryCatch(
     const productId = Number(id);
 
     if (isNaN(productId)) {
-      return next(new ErrorHandler("Invalid product ID", StatusCodes.BAD_REQUEST));
+      return next(
+        new ErrorHandler("Invalid product ID", StatusCodes.BAD_REQUEST),
+      );
     }
 
     const { name, description, price, category, stock } = req.body;
@@ -192,36 +202,74 @@ export const getAllProducts = tryCatch(
       limit = "10",
       search = "",
       sortBy = "createdAt",
+      order = "desc",
+      category = "",
+      minPrice,
+      maxPrice,
     } = req.query;
 
     const pageNum = Math.max(1, Number(page) || 1);
     const limitNum = Math.min(50, Math.max(1, Number(limit) || 10));
     const skip = (pageNum - 1) * limitNum;
 
-    const filter: any = {};
-    if (typeof search === "string" && search.trim() !== "") {
-      filter.OR = [
-        { name: { contains: search, mode: "insensitive" } },
-        { description: { contains: search, mode: "insensitive" } },
-        { category: { contains: search, mode: "insensitive" } },
-      ];
-    }
+    const sortOrder = order === "asc" ? "asc" : "desc";
 
     const allowedSortFields = ["createdAt", "name", "price"];
     const sortField = allowedSortFields.includes(sortBy as string)
       ? (sortBy as string)
       : "createdAt";
 
+    const andConditions: any[] = [];
+
+    if (typeof search === "string" && search.trim() !== "") {
+      andConditions.push({
+        OR: [
+          { name: { contains: search, mode: "insensitive" } },
+          { description: { contains: search, mode: "insensitive" } },
+          { category: { contains: search, mode: "insensitive" } },
+        ],
+      });
+    }
+
+    if (typeof category === "string" && category.trim() !== "") {
+      const categories = category
+        .split(",")
+        .map((c) => c.trim())
+        .filter(Boolean);
+
+      andConditions.push({
+        category: {
+          in: categories,
+          mode: "insensitive",
+        },
+      });
+    }
+
+    const priceFilter: any = {};
+    if (minPrice !== undefined && !isNaN(Number(minPrice))) {
+      priceFilter.gte = Number(minPrice);
+    }
+    if (maxPrice !== undefined && !isNaN(Number(maxPrice))) {
+      priceFilter.lte = Number(maxPrice);
+    }
+    if (Object.keys(priceFilter).length > 0) {
+      andConditions.push({ price: priceFilter });
+    }
+
+    const filter = andConditions.length > 0 ? { AND: andConditions } : {};
+
     const [products, total] = await Promise.all([
       prisma.product.findMany({
         where: filter,
         include: { attachments: true },
-        orderBy: { [sortField]: "desc" },
+        orderBy: { [sortField]: sortOrder },
         skip,
         take: limitNum,
       }),
       prisma.product.count({ where: filter }),
     ]);
+
+    const totalPages = Math.ceil(total / limitNum);
 
     res.status(StatusCodes.OK).json({
       success: true,
@@ -230,10 +278,123 @@ export const getAllProducts = tryCatch(
         total,
         page: pageNum,
         limit: limitNum,
-        totalPages: Math.ceil(total / limitNum),
-        hasNextPage: pageNum < Math.ceil(total / limitNum),
+        totalPages,
+        hasNextPage: pageNum < totalPages,
         hasPrevPage: pageNum > 1,
       },
     });
   },
 );
+
+// const anthropic = new Anthropic({
+//   apiKey: process.env.ANTHROPIC_API_KEY!,
+// });
+
+// export const aiSearchProducts = tryCatch(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const { query } = req.body;
+
+//     if (!query?.trim()) {
+//       return next(new ErrorHandler("Query required", StatusCodes.BAD_REQUEST));
+//     }
+
+//     // ✅ Claude se filters nikalo
+//     const message = await anthropic.messages.create({
+//       model: "claude-sonnet-4-20250514",
+//       max_tokens: 300,
+//       messages: [{
+//         role: "user",
+//         content: `You are a search filter extractor for an ecommerce store.
+// Extract filters from: "${query}"
+
+// Available categories: electronics, headphones, jeans, shoes, clothing, mobiles, laptops
+
+// Return ONLY valid JSON, no extra text:
+// {
+//   "search": "keyword or empty string",
+//   "category": "category name or empty string",
+//   "minPrice": null or number,
+//   "maxPrice": null or number,
+//   "sortBy": "createdAt",
+//   "order": "desc"
+// }`,
+//       }],
+//     });
+
+//     // ✅ Parse Claude response
+//     let filters: any = { search: query };
+//     try {
+//       const text = message.content[0].type === "text"
+//         ? message.content[0].text : "{}";
+//       filters = JSON.parse(text.replace(/```json|```/g, "").trim());
+//     } catch {
+//       filters = { search: query };
+//     }
+
+//     // ✅ Tumhara existing logic same use karo
+//     const limitNum = 20;
+//     const allowedSortFields = ["createdAt", "name", "price"];
+//     const sortField = allowedSortFields.includes(filters.sortBy)
+//       ? filters.sortBy : "createdAt";
+//     const sortOrder = filters.order === "asc" ? "asc" : "desc";
+
+//     const andConditions: any[] = [];
+
+//     if (filters.search?.trim()) {
+//       andConditions.push({
+//         OR: [
+//           { name: { contains: filters.search, mode: "insensitive" } },
+//           { description: { contains: filters.search, mode: "insensitive" } },
+//           { category: { contains: filters.search, mode: "insensitive" } },
+//         ],
+//       });
+//     }
+
+//     if (filters.category?.trim()) {
+//       const categories = filters.category
+//         .split(",").map((c: string) => c.trim()).filter(Boolean);
+//       andConditions.push({
+//         OR: categories.map((cat: string) => ({
+//           category: { equals: cat, mode: "insensitive" },
+//         })),
+//       });
+//     }
+
+//     const priceFilter: any = {};
+//     if (filters.minPrice != null && !isNaN(Number(filters.minPrice))) {
+//       priceFilter.gte = Number(filters.minPrice);
+//     }
+//     if (filters.maxPrice != null && !isNaN(Number(filters.maxPrice))) {
+//       priceFilter.lte = Number(filters.maxPrice);
+//     }
+//     if (Object.keys(priceFilter).length > 0) {
+//       andConditions.push({ price: priceFilter });
+//     }
+
+//     const where = andConditions.length > 0 ? { AND: andConditions } : {};
+
+//     const [products, total] = await Promise.all([
+//       prisma.product.findMany({
+//         where,
+//         include: { attachments: true },
+//         orderBy: { [sortField]: sortOrder },
+//         take: limitNum,
+//       }),
+//       prisma.product.count({ where }),
+//     ]);
+
+//     return res.status(StatusCodes.OK).json({
+//       success: true,
+//       data: products,
+//       filters, // ← frontend ko dikhao kya samjha Claude ne
+//       pagination: {
+//         total,
+//         page: 1,
+//         limit: limitNum,
+//         totalPages: Math.ceil(total / limitNum),
+//         hasNextPage: false,
+//         hasPrevPage: false,
+//       },
+//     });
+//   }
+// );

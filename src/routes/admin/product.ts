@@ -15,6 +15,7 @@ const router = Router();
 
 router.get("/", getAllProducts);
 router.get("/:id", getProduct);
+// router.post("/search/ai-search", aiSearchProducts);
 
 router.use(isAuthenticated, authorizeRoles("admin"));
 

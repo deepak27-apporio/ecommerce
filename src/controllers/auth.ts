@@ -19,13 +19,17 @@ export const login = tryCatch(
     });
 
     if (!user) {
-      return next(new ErrorHandler("Invalid email or password", StatusCodes.BAD_REQUEST));
+      return next(
+        new ErrorHandler("Invalid email or password", StatusCodes.BAD_REQUEST),
+      );
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return next(new ErrorHandler("Invalid email or password", StatusCodes.BAD_REQUEST));
+      return next(
+        new ErrorHandler("Invalid email or password", StatusCodes.BAD_REQUEST),
+      );
     }
 
     const accessToken = generateAccessToken(user);
@@ -61,7 +65,9 @@ export const register = tryCatch(
     });
 
     if (existingUser)
-      return next(new ErrorHandler("Email already exists", StatusCodes.BAD_REQUEST));
+      return next(
+        new ErrorHandler("Email already exists", StatusCodes.BAD_REQUEST),
+      );
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -107,7 +113,10 @@ export const logout = tryCatch(
 export const refreshToken = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.refreshToken;
-    if (!token) return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Unauthorized" });
+    if (!token)
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ message: "Unauthorized" });
     const decoded: any = verifyRefreshToken(token);
 
     const accessToken = generateAccessToken(decoded);
