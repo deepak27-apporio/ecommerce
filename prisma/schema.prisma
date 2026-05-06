@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -11,8 +6,6 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
-
-// user schema
 
 model User {
   id        Int       @id @default(autoincrement())
@@ -27,44 +20,34 @@ model User {
   orders    Order[]
 }
 
-// product schema
-
 model Product {
-  id          Int     @id @default(autoincrement())
+  id          Int                 @id @default(autoincrement())
   name        String
-  description String  @db.Text
+  description String
   price       Float
   category    String
-  stock       Int     @default(0)
-  isActive    Boolean @default(true)
-
+  isActive    Boolean             @default(true)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  stock       Int                 @default(0)
   attachments ProductAttachment[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model ProductAttachment {
-  id        Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   fileId    String
   url       String
   provider  String
   mimeType  String
   size      Int
   productId Int
-
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
   createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
-// user address schema
-
 model Address {
-  id     Int  @id @default(autoincrement())
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id         Int      @id @default(autoincrement())
+  userId     Int
   fullName   String
   phone      String
   line1      String
@@ -72,69 +55,55 @@ model Address {
   city       String
   state      String
   postalCode String
-  country    String  @default("India")
-
-  orders Order[]
-
-  createdAt DateTime @default(now())
+  country    String   @default("India")
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders     Order[]
 }
 
-
 model Order {
-  id     Int  @id @default(autoincrement())
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
-
-  addressId Int
-  address   Address @relation(fields: [addressId], references: [id])
-
-  totalAmount Float
-  tax         Float
-  shipping    Float
-  subtotal    Float
-  currency    String @default("INR")
-
-  status OrderStatus @default(CREATED)
-
-  razorpayOrderId String? @unique
-
-  items   OrderItem[]
-  payment Payment?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              Int         @id @default(autoincrement())
+  userId          Int
+  addressId       Int
+  totalAmount     Float
+  currency        String      @default("INR")
+  status          OrderStatus @default(CREATED)
+  razorpayOrderId String?     @unique
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  shipping        Float
+  subtotal        Float
+  tax             Float
+  address         Address     @relation(fields: [addressId], references: [id])
+  user            User        @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+  payment         Payment?
 }
 
 model OrderItem {
-  id      Int   @id @default(autoincrement())
-  orderId Int
-  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
-
-  productId   Int
-  productName String
-  productImages String
+  id              Int    @id @default(autoincrement())
+  orderId         Int
+  productId       Int
+  productName     String
+  quantity        Int
+  price           Int
   productCategory String
-
-  quantity Int
-  price    Int
+  productImages   String
+  order           Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
 model Payment {
-  id      Int   @id @default(autoincrement())
-  orderId Int   @unique
-  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
-
-  razorpayPaymentId String @unique
+  id                Int           @id @default(autoincrement())
+  orderId           Int           @unique
+  razorpayPaymentId String        @unique
   razorpayOrderId   String
   razorpaySignature String
-
-  amount   Int
-  currency String @default("INR")
-
-  status PaymentStatus
-  method String?
-
-  createdAt DateTime @default(now())
+  amount            Int
+  currency          String        @default("INR")
+  status            PaymentStatus
+  method            String?
+  createdAt         DateTime      @default(now())
+  order             Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
 enum Gender {
@@ -150,9 +119,9 @@ enum Role {
 enum OrderStatus {
   CREATED
   PROCESSING
-  CANCELED
   SHIPPED
   DELIVERED
+  CANCELLED
 }
 
 enum PaymentStatus {

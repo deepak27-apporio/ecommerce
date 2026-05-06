@@ -987,10 +987,10 @@ export const ProductScalarFieldEnum = {
   description: 'description',
   price: 'price',
   category: 'category',
-  stock: 'stock',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  stock: 'stock'
 } as const
 
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
@@ -1032,14 +1032,14 @@ export const OrderScalarFieldEnum = {
   userId: 'userId',
   addressId: 'addressId',
   totalAmount: 'totalAmount',
-  tax: 'tax',
-  shipping: 'shipping',
-  subtotal: 'subtotal',
   currency: 'currency',
   status: 'status',
   razorpayOrderId: 'razorpayOrderId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  shipping: 'shipping',
+  subtotal: 'subtotal',
+  tax: 'tax'
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
@@ -1050,10 +1050,10 @@ export const OrderItemScalarFieldEnum = {
   orderId: 'orderId',
   productId: 'productId',
   productName: 'productName',
-  productImages: 'productImages',
-  productCategory: 'productCategory',
   quantity: 'quantity',
-  price: 'price'
+  price: 'price',
+  productCategory: 'productCategory',
+  productImages: 'productImages'
 } as const
 
 export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]

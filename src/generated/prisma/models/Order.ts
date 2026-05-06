@@ -31,9 +31,9 @@ export type OrderAvgAggregateOutputType = {
   userId: number | null
   addressId: number | null
   totalAmount: number | null
-  tax: number | null
   shipping: number | null
   subtotal: number | null
+  tax: number | null
 }
 
 export type OrderSumAggregateOutputType = {
@@ -41,9 +41,9 @@ export type OrderSumAggregateOutputType = {
   userId: number | null
   addressId: number | null
   totalAmount: number | null
-  tax: number | null
   shipping: number | null
   subtotal: number | null
+  tax: number | null
 }
 
 export type OrderMinAggregateOutputType = {
@@ -51,14 +51,14 @@ export type OrderMinAggregateOutputType = {
   userId: number | null
   addressId: number | null
   totalAmount: number | null
-  tax: number | null
-  shipping: number | null
-  subtotal: number | null
   currency: string | null
   status: $Enums.OrderStatus | null
   razorpayOrderId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  shipping: number | null
+  subtotal: number | null
+  tax: number | null
 }
 
 export type OrderMaxAggregateOutputType = {
@@ -66,14 +66,14 @@ export type OrderMaxAggregateOutputType = {
   userId: number | null
   addressId: number | null
   totalAmount: number | null
-  tax: number | null
-  shipping: number | null
-  subtotal: number | null
   currency: string | null
   status: $Enums.OrderStatus | null
   razorpayOrderId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  shipping: number | null
+  subtotal: number | null
+  tax: number | null
 }
 
 export type OrderCountAggregateOutputType = {
@@ -81,14 +81,14 @@ export type OrderCountAggregateOutputType = {
   userId: number
   addressId: number
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency: number
   status: number
   razorpayOrderId: number
   createdAt: number
   updatedAt: number
+  shipping: number
+  subtotal: number
+  tax: number
   _all: number
 }
 
@@ -98,9 +98,9 @@ export type OrderAvgAggregateInputType = {
   userId?: true
   addressId?: true
   totalAmount?: true
-  tax?: true
   shipping?: true
   subtotal?: true
+  tax?: true
 }
 
 export type OrderSumAggregateInputType = {
@@ -108,9 +108,9 @@ export type OrderSumAggregateInputType = {
   userId?: true
   addressId?: true
   totalAmount?: true
-  tax?: true
   shipping?: true
   subtotal?: true
+  tax?: true
 }
 
 export type OrderMinAggregateInputType = {
@@ -118,14 +118,14 @@ export type OrderMinAggregateInputType = {
   userId?: true
   addressId?: true
   totalAmount?: true
-  tax?: true
-  shipping?: true
-  subtotal?: true
   currency?: true
   status?: true
   razorpayOrderId?: true
   createdAt?: true
   updatedAt?: true
+  shipping?: true
+  subtotal?: true
+  tax?: true
 }
 
 export type OrderMaxAggregateInputType = {
@@ -133,14 +133,14 @@ export type OrderMaxAggregateInputType = {
   userId?: true
   addressId?: true
   totalAmount?: true
-  tax?: true
-  shipping?: true
-  subtotal?: true
   currency?: true
   status?: true
   razorpayOrderId?: true
   createdAt?: true
   updatedAt?: true
+  shipping?: true
+  subtotal?: true
+  tax?: true
 }
 
 export type OrderCountAggregateInputType = {
@@ -148,14 +148,14 @@ export type OrderCountAggregateInputType = {
   userId?: true
   addressId?: true
   totalAmount?: true
-  tax?: true
-  shipping?: true
-  subtotal?: true
   currency?: true
   status?: true
   razorpayOrderId?: true
   createdAt?: true
   updatedAt?: true
+  shipping?: true
+  subtotal?: true
+  tax?: true
   _all?: true
 }
 
@@ -250,14 +250,14 @@ export type OrderGroupByOutputType = {
   userId: number
   addressId: number
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency: string
   status: $Enums.OrderStatus
   razorpayOrderId: string | null
   createdAt: Date
   updatedAt: Date
+  shipping: number
+  subtotal: number
+  tax: number
   _count: OrderCountAggregateOutputType | null
   _avg: OrderAvgAggregateOutputType | null
   _sum: OrderSumAggregateOutputType | null
@@ -287,17 +287,17 @@ export type OrderWhereInput = {
   id?: Prisma.IntFilter<"Order"> | number
   userId?: Prisma.IntFilter<"Order"> | number
   addressId?: Prisma.IntFilter<"Order"> | number
-  totalAmount?: Prisma.IntFilter<"Order"> | number
-  tax?: Prisma.IntFilter<"Order"> | number
-  shipping?: Prisma.IntFilter<"Order"> | number
-  subtotal?: Prisma.IntFilter<"Order"> | number
+  totalAmount?: Prisma.FloatFilter<"Order"> | number
   currency?: Prisma.StringFilter<"Order"> | string
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   razorpayOrderId?: Prisma.StringNullableFilter<"Order"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  shipping?: Prisma.FloatFilter<"Order"> | number
+  subtotal?: Prisma.FloatFilter<"Order"> | number
+  tax?: Prisma.FloatFilter<"Order"> | number
   address?: Prisma.XOR<Prisma.AddressScalarRelationFilter, Prisma.AddressWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   items?: Prisma.OrderItemListRelationFilter
   payment?: Prisma.XOR<Prisma.PaymentNullableScalarRelationFilter, Prisma.PaymentWhereInput> | null
 }
@@ -307,16 +307,16 @@ export type OrderOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   addressId?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
-  tax?: Prisma.SortOrder
-  shipping?: Prisma.SortOrder
-  subtotal?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   razorpayOrderId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
+  shipping?: Prisma.SortOrder
+  subtotal?: Prisma.SortOrder
+  tax?: Prisma.SortOrder
   address?: Prisma.AddressOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
   items?: Prisma.OrderItemOrderByRelationAggregateInput
   payment?: Prisma.PaymentOrderByWithRelationInput
 }
@@ -329,16 +329,16 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
   userId?: Prisma.IntFilter<"Order"> | number
   addressId?: Prisma.IntFilter<"Order"> | number
-  totalAmount?: Prisma.IntFilter<"Order"> | number
-  tax?: Prisma.IntFilter<"Order"> | number
-  shipping?: Prisma.IntFilter<"Order"> | number
-  subtotal?: Prisma.IntFilter<"Order"> | number
+  totalAmount?: Prisma.FloatFilter<"Order"> | number
   currency?: Prisma.StringFilter<"Order"> | string
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  shipping?: Prisma.FloatFilter<"Order"> | number
+  subtotal?: Prisma.FloatFilter<"Order"> | number
+  tax?: Prisma.FloatFilter<"Order"> | number
   address?: Prisma.XOR<Prisma.AddressScalarRelationFilter, Prisma.AddressWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   items?: Prisma.OrderItemListRelationFilter
   payment?: Prisma.XOR<Prisma.PaymentNullableScalarRelationFilter, Prisma.PaymentWhereInput> | null
 }, "id" | "razorpayOrderId">
@@ -348,14 +348,14 @@ export type OrderOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   addressId?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
-  tax?: Prisma.SortOrder
-  shipping?: Prisma.SortOrder
-  subtotal?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   razorpayOrderId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  shipping?: Prisma.SortOrder
+  subtotal?: Prisma.SortOrder
+  tax?: Prisma.SortOrder
   _count?: Prisma.OrderCountOrderByAggregateInput
   _avg?: Prisma.OrderAvgOrderByAggregateInput
   _max?: Prisma.OrderMaxOrderByAggregateInput
@@ -370,29 +370,29 @@ export type OrderScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Order"> | number
   userId?: Prisma.IntWithAggregatesFilter<"Order"> | number
   addressId?: Prisma.IntWithAggregatesFilter<"Order"> | number
-  totalAmount?: Prisma.IntWithAggregatesFilter<"Order"> | number
-  tax?: Prisma.IntWithAggregatesFilter<"Order"> | number
-  shipping?: Prisma.IntWithAggregatesFilter<"Order"> | number
-  subtotal?: Prisma.IntWithAggregatesFilter<"Order"> | number
+  totalAmount?: Prisma.FloatWithAggregatesFilter<"Order"> | number
   currency?: Prisma.StringWithAggregatesFilter<"Order"> | string
   status?: Prisma.EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
   razorpayOrderId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
+  shipping?: Prisma.FloatWithAggregatesFilter<"Order"> | number
+  subtotal?: Prisma.FloatWithAggregatesFilter<"Order"> | number
+  tax?: Prisma.FloatWithAggregatesFilter<"Order"> | number
 }
 
 export type OrderCreateInput = {
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency?: string
   status?: $Enums.OrderStatus
   razorpayOrderId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutOrdersInput
+  shipping: number
+  subtotal: number
+  tax: number
   address: Prisma.AddressCreateNestedOneWithoutOrdersInput
+  user: Prisma.UserCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   payment?: Prisma.PaymentCreateNestedOneWithoutOrderInput
 }
@@ -402,30 +402,30 @@ export type OrderUncheckedCreateInput = {
   userId: number
   addressId: number
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency?: string
   status?: $Enums.OrderStatus
   razorpayOrderId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  shipping: number
+  subtotal: number
+  tax: number
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   payment?: Prisma.PaymentUncheckedCreateNestedOneWithoutOrderInput
 }
 
 export type OrderUpdateInput = {
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
   address?: Prisma.AddressUpdateOneRequiredWithoutOrdersNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   payment?: Prisma.PaymentUpdateOneWithoutOrderNestedInput
 }
@@ -434,15 +434,15 @@ export type OrderUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   addressId?: Prisma.IntFieldUpdateOperationsInput | number
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   payment?: Prisma.PaymentUncheckedUpdateOneWithoutOrderNestedInput
 }
@@ -452,41 +452,41 @@ export type OrderCreateManyInput = {
   userId: number
   addressId: number
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency?: string
   status?: $Enums.OrderStatus
   razorpayOrderId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  shipping: number
+  subtotal: number
+  tax: number
 }
 
 export type OrderUpdateManyMutationInput = {
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 export type OrderUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   addressId?: Prisma.IntFieldUpdateOperationsInput | number
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 export type OrderListRelationFilter = {
@@ -504,14 +504,14 @@ export type OrderCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   addressId?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
-  tax?: Prisma.SortOrder
-  shipping?: Prisma.SortOrder
-  subtotal?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   razorpayOrderId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  shipping?: Prisma.SortOrder
+  subtotal?: Prisma.SortOrder
+  tax?: Prisma.SortOrder
 }
 
 export type OrderAvgOrderByAggregateInput = {
@@ -519,9 +519,9 @@ export type OrderAvgOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   addressId?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
-  tax?: Prisma.SortOrder
   shipping?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
+  tax?: Prisma.SortOrder
 }
 
 export type OrderMaxOrderByAggregateInput = {
@@ -529,14 +529,14 @@ export type OrderMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   addressId?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
-  tax?: Prisma.SortOrder
-  shipping?: Prisma.SortOrder
-  subtotal?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   razorpayOrderId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  shipping?: Prisma.SortOrder
+  subtotal?: Prisma.SortOrder
+  tax?: Prisma.SortOrder
 }
 
 export type OrderMinOrderByAggregateInput = {
@@ -544,14 +544,14 @@ export type OrderMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   addressId?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
-  tax?: Prisma.SortOrder
-  shipping?: Prisma.SortOrder
-  subtotal?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   status?: Prisma.SortOrder
   razorpayOrderId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  shipping?: Prisma.SortOrder
+  subtotal?: Prisma.SortOrder
+  tax?: Prisma.SortOrder
 }
 
 export type OrderSumOrderByAggregateInput = {
@@ -559,9 +559,9 @@ export type OrderSumOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   addressId?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
-  tax?: Prisma.SortOrder
   shipping?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
+  tax?: Prisma.SortOrder
 }
 
 export type OrderScalarRelationFilter = {
@@ -687,14 +687,14 @@ export type OrderUpdateOneRequiredWithoutPaymentNestedInput = {
 
 export type OrderCreateWithoutUserInput = {
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency?: string
   status?: $Enums.OrderStatus
   razorpayOrderId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  shipping: number
+  subtotal: number
+  tax: number
   address: Prisma.AddressCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   payment?: Prisma.PaymentCreateNestedOneWithoutOrderInput
@@ -704,14 +704,14 @@ export type OrderUncheckedCreateWithoutUserInput = {
   id?: number
   addressId: number
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency?: string
   status?: $Enums.OrderStatus
   razorpayOrderId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  shipping: number
+  subtotal: number
+  tax: number
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   payment?: Prisma.PaymentUncheckedCreateNestedOneWithoutOrderInput
 }
@@ -749,27 +749,27 @@ export type OrderScalarWhereInput = {
   id?: Prisma.IntFilter<"Order"> | number
   userId?: Prisma.IntFilter<"Order"> | number
   addressId?: Prisma.IntFilter<"Order"> | number
-  totalAmount?: Prisma.IntFilter<"Order"> | number
-  tax?: Prisma.IntFilter<"Order"> | number
-  shipping?: Prisma.IntFilter<"Order"> | number
-  subtotal?: Prisma.IntFilter<"Order"> | number
+  totalAmount?: Prisma.FloatFilter<"Order"> | number
   currency?: Prisma.StringFilter<"Order"> | string
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   razorpayOrderId?: Prisma.StringNullableFilter<"Order"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
+  shipping?: Prisma.FloatFilter<"Order"> | number
+  subtotal?: Prisma.FloatFilter<"Order"> | number
+  tax?: Prisma.FloatFilter<"Order"> | number
 }
 
 export type OrderCreateWithoutAddressInput = {
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency?: string
   status?: $Enums.OrderStatus
   razorpayOrderId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  shipping: number
+  subtotal: number
+  tax: number
   user: Prisma.UserCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   payment?: Prisma.PaymentCreateNestedOneWithoutOrderInput
@@ -779,14 +779,14 @@ export type OrderUncheckedCreateWithoutAddressInput = {
   id?: number
   userId: number
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency?: string
   status?: $Enums.OrderStatus
   razorpayOrderId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  shipping: number
+  subtotal: number
+  tax: number
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   payment?: Prisma.PaymentUncheckedCreateNestedOneWithoutOrderInput
 }
@@ -819,16 +819,16 @@ export type OrderUpdateManyWithWhereWithoutAddressInput = {
 
 export type OrderCreateWithoutItemsInput = {
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency?: string
   status?: $Enums.OrderStatus
   razorpayOrderId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutOrdersInput
+  shipping: number
+  subtotal: number
+  tax: number
   address: Prisma.AddressCreateNestedOneWithoutOrdersInput
+  user: Prisma.UserCreateNestedOneWithoutOrdersInput
   payment?: Prisma.PaymentCreateNestedOneWithoutOrderInput
 }
 
@@ -837,14 +837,14 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   userId: number
   addressId: number
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency?: string
   status?: $Enums.OrderStatus
   razorpayOrderId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  shipping: number
+  subtotal: number
+  tax: number
   payment?: Prisma.PaymentUncheckedCreateNestedOneWithoutOrderInput
 }
 
@@ -865,17 +865,17 @@ export type OrderUpdateToOneWithWhereWithoutItemsInput = {
 }
 
 export type OrderUpdateWithoutItemsInput = {
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
   address?: Prisma.AddressUpdateOneRequiredWithoutOrdersNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   payment?: Prisma.PaymentUpdateOneWithoutOrderNestedInput
 }
 
@@ -883,30 +883,30 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   addressId?: Prisma.IntFieldUpdateOperationsInput | number
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
   payment?: Prisma.PaymentUncheckedUpdateOneWithoutOrderNestedInput
 }
 
 export type OrderCreateWithoutPaymentInput = {
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency?: string
   status?: $Enums.OrderStatus
   razorpayOrderId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutOrdersInput
+  shipping: number
+  subtotal: number
+  tax: number
   address: Prisma.AddressCreateNestedOneWithoutOrdersInput
+  user: Prisma.UserCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
 }
 
@@ -915,14 +915,14 @@ export type OrderUncheckedCreateWithoutPaymentInput = {
   userId: number
   addressId: number
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency?: string
   status?: $Enums.OrderStatus
   razorpayOrderId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  shipping: number
+  subtotal: number
+  tax: number
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
 }
 
@@ -943,17 +943,17 @@ export type OrderUpdateToOneWithWhereWithoutPaymentInput = {
 }
 
 export type OrderUpdateWithoutPaymentInput = {
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
   address?: Prisma.AddressUpdateOneRequiredWithoutOrdersNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
 }
 
@@ -961,15 +961,15 @@ export type OrderUncheckedUpdateWithoutPaymentInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   addressId?: Prisma.IntFieldUpdateOperationsInput | number
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
 }
 
@@ -977,26 +977,26 @@ export type OrderCreateManyUserInput = {
   id?: number
   addressId: number
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency?: string
   status?: $Enums.OrderStatus
   razorpayOrderId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  shipping: number
+  subtotal: number
+  tax: number
 }
 
 export type OrderUpdateWithoutUserInput = {
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
   address?: Prisma.AddressUpdateOneRequiredWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   payment?: Prisma.PaymentUpdateOneWithoutOrderNestedInput
@@ -1005,15 +1005,15 @@ export type OrderUpdateWithoutUserInput = {
 export type OrderUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   addressId?: Prisma.IntFieldUpdateOperationsInput | number
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   payment?: Prisma.PaymentUncheckedUpdateOneWithoutOrderNestedInput
 }
@@ -1021,41 +1021,41 @@ export type OrderUncheckedUpdateWithoutUserInput = {
 export type OrderUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   addressId?: Prisma.IntFieldUpdateOperationsInput | number
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 export type OrderCreateManyAddressInput = {
   id?: number
   userId: number
   totalAmount: number
-  tax: number
-  shipping: number
-  subtotal: number
   currency?: string
   status?: $Enums.OrderStatus
   razorpayOrderId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  shipping: number
+  subtotal: number
+  tax: number
 }
 
 export type OrderUpdateWithoutAddressInput = {
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   payment?: Prisma.PaymentUpdateOneWithoutOrderNestedInput
@@ -1064,15 +1064,15 @@ export type OrderUpdateWithoutAddressInput = {
 export type OrderUncheckedUpdateWithoutAddressInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   payment?: Prisma.PaymentUncheckedUpdateOneWithoutOrderNestedInput
 }
@@ -1080,15 +1080,15 @@ export type OrderUncheckedUpdateWithoutAddressInput = {
 export type OrderUncheckedUpdateManyWithoutAddressInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
-  totalAmount?: Prisma.IntFieldUpdateOperationsInput | number
-  tax?: Prisma.IntFieldUpdateOperationsInput | number
-  shipping?: Prisma.IntFieldUpdateOperationsInput | number
-  subtotal?: Prisma.IntFieldUpdateOperationsInput | number
+  totalAmount?: Prisma.FloatFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   razorpayOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
 
@@ -1127,16 +1127,16 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   userId?: boolean
   addressId?: boolean
   totalAmount?: boolean
-  tax?: boolean
-  shipping?: boolean
-  subtotal?: boolean
   currency?: boolean
   status?: boolean
   razorpayOrderId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  shipping?: boolean
+  subtotal?: boolean
+  tax?: boolean
   address?: boolean | Prisma.AddressDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
   payment?: boolean | Prisma.Order$paymentArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
@@ -1147,16 +1147,16 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   userId?: boolean
   addressId?: boolean
   totalAmount?: boolean
-  tax?: boolean
-  shipping?: boolean
-  subtotal?: boolean
   currency?: boolean
   status?: boolean
   razorpayOrderId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  shipping?: boolean
+  subtotal?: boolean
+  tax?: boolean
   address?: boolean | Prisma.AddressDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
 export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1164,16 +1164,16 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   userId?: boolean
   addressId?: boolean
   totalAmount?: boolean
-  tax?: boolean
-  shipping?: boolean
-  subtotal?: boolean
   currency?: boolean
   status?: boolean
   razorpayOrderId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  shipping?: boolean
+  subtotal?: boolean
+  tax?: boolean
   address?: boolean | Prisma.AddressDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
 export type OrderSelectScalar = {
@@ -1181,38 +1181,38 @@ export type OrderSelectScalar = {
   userId?: boolean
   addressId?: boolean
   totalAmount?: boolean
-  tax?: boolean
-  shipping?: boolean
-  subtotal?: boolean
   currency?: boolean
   status?: boolean
   razorpayOrderId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  shipping?: boolean
+  subtotal?: boolean
+  tax?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "addressId" | "totalAmount" | "tax" | "shipping" | "subtotal" | "currency" | "status" | "razorpayOrderId" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "addressId" | "totalAmount" | "currency" | "status" | "razorpayOrderId" | "createdAt" | "updatedAt" | "shipping" | "subtotal" | "tax", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   address?: boolean | Prisma.AddressDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
   payment?: boolean | Prisma.Order$paymentArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   address?: boolean | Prisma.AddressDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type OrderIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   address?: boolean | Prisma.AddressDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Order"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
     address: Prisma.$AddressPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs>
     items: Prisma.$OrderItemPayload<ExtArgs>[]
     payment: Prisma.$PaymentPayload<ExtArgs> | null
   }
@@ -1221,14 +1221,14 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     userId: number
     addressId: number
     totalAmount: number
-    tax: number
-    shipping: number
-    subtotal: number
     currency: string
     status: $Enums.OrderStatus
     razorpayOrderId: string | null
     createdAt: Date
     updatedAt: Date
+    shipping: number
+    subtotal: number
+    tax: number
   }, ExtArgs["result"]["order"]>
   composites: {}
 }
@@ -1623,8 +1623,8 @@ readonly fields: OrderFieldRefs;
  */
 export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   address<T extends Prisma.AddressDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AddressDefaultArgs<ExtArgs>>): Prisma.Prisma__AddressClient<runtime.Types.Result.GetResult<Prisma.$AddressPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.Order$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payment<T extends Prisma.Order$paymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$paymentArgs<ExtArgs>>): Prisma.Prisma__PaymentClient<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1659,15 +1659,15 @@ export interface OrderFieldRefs {
   readonly id: Prisma.FieldRef<"Order", 'Int'>
   readonly userId: Prisma.FieldRef<"Order", 'Int'>
   readonly addressId: Prisma.FieldRef<"Order", 'Int'>
-  readonly totalAmount: Prisma.FieldRef<"Order", 'Int'>
-  readonly tax: Prisma.FieldRef<"Order", 'Int'>
-  readonly shipping: Prisma.FieldRef<"Order", 'Int'>
-  readonly subtotal: Prisma.FieldRef<"Order", 'Int'>
+  readonly totalAmount: Prisma.FieldRef<"Order", 'Float'>
   readonly currency: Prisma.FieldRef<"Order", 'String'>
   readonly status: Prisma.FieldRef<"Order", 'OrderStatus'>
   readonly razorpayOrderId: Prisma.FieldRef<"Order", 'String'>
   readonly createdAt: Prisma.FieldRef<"Order", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Order", 'DateTime'>
+  readonly shipping: Prisma.FieldRef<"Order", 'Float'>
+  readonly subtotal: Prisma.FieldRef<"Order", 'Float'>
+  readonly tax: Prisma.FieldRef<"Order", 'Float'>
 }
     
 

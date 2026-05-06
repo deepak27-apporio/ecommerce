@@ -132,7 +132,7 @@ export const verifyPayment = tryCatch(
 
         await prisma.order.update({
           where: { id: failedOrder.id },
-          data: { status: "FAILED" },
+          data: { status: "PROCESSING" },
         });
       }
 
@@ -177,7 +177,7 @@ export const verifyPayment = tryCatch(
 
       prisma.order.update({
         where: { id: order.id },
-        data: { status: "PAID" },
+        data: { status: "PROCESSING" },
       }),
     ]);
 
@@ -213,6 +213,7 @@ export const getAllOrders = tryCatch(
     const orders = await prisma.order.findMany({
       where: { userId: req.user.id },
       include: { items: true, address: true },
+      orderBy: { createdAt: "desc" }
     });
 
     return res.status(StatusCodes.OK).json({

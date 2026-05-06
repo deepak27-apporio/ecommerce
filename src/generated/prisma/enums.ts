@@ -27,10 +27,10 @@ export type Role = (typeof Role)[keyof typeof Role]
 
 export const OrderStatus = {
   CREATED: 'CREATED',
-  PAID: 'PAID',
-  FAILED: 'FAILED',
+  PROCESSING: 'PROCESSING',
   SHIPPED: 'SHIPPED',
-  DELIVERED: 'DELIVERED'
+  DELIVERED: 'DELIVERED',
+  CANCELLED: 'CANCELLED'
 } as const
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
