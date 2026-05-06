@@ -4,20 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AiFillFileText } from "react-icons/ai";
-import {
-  FaChartBar,
-  FaChartLine,
-  FaChartPie,
-  FaGamepad,
-  FaStopwatch,
-} from "react-icons/fa";
 import { HiMenuAlt4 } from "react-icons/hi";
-import { IoIosPeople } from "react-icons/io";
-import {
-  RiCoupon3Fill,
-  RiDashboardFill,
-  RiShoppingBag3Fill,
-} from "react-icons/ri";
+import { RiDashboardFill, RiShoppingBag3Fill } from "react-icons/ri";
 import { IconType } from "react-icons";
 
 const AdminSidebar = () => {
@@ -60,10 +48,19 @@ const AdminSidebar = () => {
           heading="Dashboard"
           pathname={pathname}
           items={[
-            { url: "/admin/dashboard", text: "Dashboard", Icon: RiDashboardFill },
-            { url: "/admin/product", text: "Product", Icon: RiShoppingBag3Fill },
-            { url: "/admin/customers", text: "Customer", Icon: IoIosPeople },
-            { url: "/admin/transaction", text: "Transaction", Icon: AiFillFileText },
+            {
+              url: "/admin/dashboard",
+              text: "Dashboard",
+              Icon: RiDashboardFill,
+            },
+            {
+              url: "/admin/product",
+              text: "Product",
+              Icon: RiShoppingBag3Fill,
+            },
+            // { url: "/admin/customers", text: "Customer", Icon: IoIosPeople },
+            // { url: "/admin/transaction", text: "Transaction", Icon: AiFillFileText },
+            { url: "/admin/orders", text: "Orders", Icon: AiFillFileText },
           ]}
         />
         {/* <MenuGroup
@@ -120,12 +117,7 @@ const MenuGroup = ({
   </div>
 );
 
-const Li = ({
-  url,
-  text,
-  pathname,
-  Icon,
-}: MenuItem & { pathname: string }) => {
+const Li = ({ url, text, pathname, Icon }: MenuItem & { pathname: string }) => {
   const active = pathname === url || pathname.startsWith(`${url}/`);
 
   return (

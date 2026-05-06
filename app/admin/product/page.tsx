@@ -56,18 +56,22 @@ const Products = () => {
                 : "/placeholder.png"
             }
             alt={product.name}
+            className="h-20 w-20"
           />
         ),
         name: product.name,
         price: `Rs ${product.price.toLocaleString("en-IN")}`,
         stock: product.stock,
         action: (
-          <Link href={`/admin/product/${product.id}`}>
+          <Link
+            href={`/admin/product/${product.id}`}
+            className="bg-black text-white! px-4 py-2 rounded-lg hover:bg-gray-800"
+          >
             Manage
           </Link>
         ),
       })),
-    [productsList], 
+    [productsList],
   );
 
   const Table = TableHOC<DataType>(

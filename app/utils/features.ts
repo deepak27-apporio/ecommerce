@@ -1,3 +1,5 @@
+import { ORDER_STEPS } from "../types/Constants";
+
 export const transformImage = (url: string, width = 200) => {
   const newUrl = url?.replace("upload/", `upload/dpr_auto/w_${width}/`);
   return newUrl;
@@ -22,3 +24,15 @@ export const calculateTotalPrices = (items: any[]) => {
       total: subtotal + shipping + tax,
     };
 }
+
+export const getStepIndex = (status: string) => {
+  const index = ORDER_STEPS.findIndex((step) => step.key === status);
+  return index === -1 ? 0 : index;
+};
+
+// Format date helper
+export const formatDate = (baseDate: string, addDaysCount: number) => {
+  const date = new Date(baseDate);
+  date.setDate(date.getDate() + addDaysCount);
+  return date.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+};

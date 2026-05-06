@@ -8,8 +8,8 @@ export const login = async (email: string, password: string) => {
     const res = await api.post("/auth/login", { email, password });
     setToken(res?.data?.accessToken);
     return res.data;
-  } catch (error) {
-    throw error;
+  } catch (error:any) {
+    throw error?.response?.data;
   }
 };
 
@@ -17,8 +17,9 @@ export const userRegister = async (FormData: any) => {
   try {
     const res = await api.post("/auth/register", FormData);
     return res.data;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    console.log("Registration API Error:", error);
+    throw error?.response?.data;
   }
 };
 
@@ -27,7 +28,7 @@ export const logout = async () => {
     const res = await api.post("/auth/logout");
     clearToken();
     return res.data;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw error?.response?.data;
   }
 };

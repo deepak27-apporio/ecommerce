@@ -4,8 +4,8 @@ export const createOrder = async (orderData: any) => {
   try {
     const response = await api.post("/order/create", orderData);
     return response.data;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw error?.response?.data;
   }
 };
 
@@ -39,8 +39,8 @@ export const openRazorpay = (orderData: any) => {
 
     const rzp = new (window as any).Razorpay(options);
     rzp.open();
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw error?.response?.data;
   }
 };
 
@@ -48,7 +48,16 @@ export const getOrderDetails = async (orderId: number) => {
   try {
     const response = await api.get(`/order/${orderId}`);
     return response?.data;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw error?.response?.data;
+  }
+};
+
+export const getAllOrders = async () => {
+  try {
+    const response = await api.get("/order/all-orders");
+    return response?.data;
+  } catch (error: any) {
+    throw error?.response?.data;
   }
 };

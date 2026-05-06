@@ -8,15 +8,18 @@ export function proxy(request: NextRequest) {
 
   const isDashboard = pathname.startsWith("/admin/dashboard");
   const isAuthPage =
-    pathname.startsWith("/login") ||
-    pathname.startsWith("/register");
+    pathname.startsWith("/login") || pathname.startsWith("/register");
 
-  // ❌ Not logged in → block dashboard
+  const isCheckoutPage = pathname.startsWith("/checkout");
+
   if (isDashboard && !token) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // ❌ Logged in → block login/register
+  if (isCheckoutPage && !token) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
   if (isAuthPage && token) {
     return NextResponse.redirect(new URL("/admin/dashboard", request.url));
   }
@@ -25,5 +28,10 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/dashboard/:path*", "/login", "/register"],
+  matcher: [
+    "/admin/dashboard/:path*",
+    "/login",
+    "/register",
+    "/checkout/:path*",
+  ],
 };

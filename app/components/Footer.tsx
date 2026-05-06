@@ -52,7 +52,7 @@ const Footer = () => {
           </div>
 
           <div className="pt-12 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-            <p>© 2024 MODERN ELITE. All Rights Reserved.</p>
+            <p>© 2026 MODERN ELITE. All Rights Reserved.</p>
             <div className="flex gap-8">
               <a href="#" className="hover:text-on-surface">Instagram</a>
               <a href="#" className="hover:text-on-surface">Twitter</a>

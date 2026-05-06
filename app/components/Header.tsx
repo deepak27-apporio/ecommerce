@@ -63,7 +63,7 @@ const Header = () => {
           onClick={() => setIsOpen(false)}
           className="text-white font-bold text-lg tracking-widest hover:text-indigo-400 transition"
         >
-          ML
+          ME
         </Link>
 
         {/* Right actions */}

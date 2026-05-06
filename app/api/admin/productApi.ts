@@ -2,12 +2,21 @@
 
 import { api } from "../axios";
 
-export const getAllProducts = async () => {
+export interface ProductQueryParams {
+  search?: string;
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  page?: number;
+  limit?: number;
+}
+
+export const getAllProducts = async (params?: ProductQueryParams) => {
   try {
-    const res = await api.get("/admin/product");
+    const res = await api.get("/admin/product", { params });
     return res.data;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw error?.response?.data;
   }
 };
 
@@ -20,8 +29,8 @@ export const createProduct = async (data: FormData) => {
       },
     });
     return res.data;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw error?.response?.data;
   }
 };
 
@@ -29,8 +38,8 @@ export const updateProduct = async (data: FormData, url: string) => {
   try {
     const res = await api.put(url, data);
     return res.data;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw error?.response?.data;
   }
 };
 
@@ -38,8 +47,8 @@ export const getProductById = async (id: string) => {
   try {
     const res = await api.get(`/admin/product/${id}`);
     return res.data;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw error?.response?.data;
   }
 };
 
@@ -47,7 +56,7 @@ export const deleteProduct = async (id: string) => {
   try {
     const res = await api.delete(`/admin/product/${id}`);
     return res.data;
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    throw error?.response?.data;
   }
 };

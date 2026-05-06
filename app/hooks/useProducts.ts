@@ -1,18 +1,26 @@
 import { useCallback, useEffect, useState } from "react";
-import { Product } from "../types/types";
-import { getAllProducts } from "../api/admin/productApi";
+import { getAllProducts, ProductQueryParams } from "../api/admin/productApi";
 import toast from "react-hot-toast";
 
-export function useProducts() {
-  const [products, setProducts] = useState<Product[]>([]);
+export function useProducts(filters: ProductQueryParams = {}) {
+  const [products, setProducts] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { search, category, minPrice, maxPrice, page, limit } = filters;
 
   const fetchProducts = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
-      const res = await getAllProducts();
+      const params: ProductQueryParams = {};
+      if (search) params.search = search;
+      if (category) params.category = category;
+      if (minPrice !== undefined) params.minPrice = minPrice;
+      if (maxPrice !== undefined) params.maxPrice = maxPrice;
+      if (page) params.page = page;
+      if (limit) params.limit = limit;
+      const res = await getAllProducts(params);
       setProducts(res);
     } catch (err: any) {
       const message = err?.message || "Failed to load products.";
@@ -21,7 +29,7 @@ export function useProducts() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [search, category, minPrice, maxPrice, page, limit]);
 
   useEffect(() => {
     fetchProducts();

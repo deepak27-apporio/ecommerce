@@ -63,3 +63,4 @@ export interface InputProps {
   error?: string;
   registration: ReturnType<ReturnType<typeof useForm>["register"]>;
 }
+

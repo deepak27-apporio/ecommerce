@@ -2,52 +2,49 @@
 
 import { motion } from "motion/react";
 import { 
-  ShoppingBag, 
-  User, 
   ArrowRight, 
-  Instagram, 
-  Twitter, 
-  Facebook,
-  Mail,
-  Globe,
-  Share2
 } from "lucide-react";
 import Link from "next/link";
+import { useProducts } from "./hooks/useProducts";
+import { getFullImageUrl } from "./utils/features";
 
-const PRODUCTS = [
-  {
-    id: 1,
-    tag: "Limited",
-    category: "Elite Series",
-    name: "Classic Canvas High",
-    price: 180.00,
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBU9SXpJnH6zQi5mIm-Y24eoX47KHq3M3yXI4-OYwLHTFFDQ6RwOuJytmOk9llffCOIjw0vphtP_8wHjMn-uOJ7SJqBVzItBn39qHFb4_WwOLjnYWOs-UB5EIAbcXKMOxO_lU57ZBTeznH6r2vfDfeev0LhVCM-blGSDsq31U0IGF18IeCck-fCvQ2nRMDwO-UQ97wwFGVSzNBEEMbxkO6-a08q3g8CdHg9Bcgs_xZrTf3KrvvI9kFFnQJXMei1qdzCzbnEuD1cIVu6"
-  },
-  {
-    id: 2,
-    category: "Wearables",
-    name: "Elite Series 4 Watch",
-    price: 450.00,
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBc5wfa4z7WWIj_I4AwMb4hVIWz1177vDeR1uJKkVsVG_KY_06NrsQYCl7YQq__0FkylPBJq_BpduS6oC53NA7B4LvhFfz777dYSxkn273IWEY3q6v7ohZlIACL8bEvC0HFNGE3BWJ2EO-2mdo3E8IIH9v_khQKtGTtJWmj3TPoASWkOCYeqKAS0-KeCjA15oq5SqwdG_SvpjkXVLE21qaJVY5c6rcJaOWznP5uyxdbcYfQF62pWN0FMGiHuLC4_uSdVFGvbPPGPuRq"
-  },
-  {
-    id: 3,
-    tag: "New",
-    category: "Accessories",
-    name: "Linear Frame Sun",
-    price: 210.00,
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDk9TxvaaqFvM6Kp-VQb8lcC9fcXqrmfYcOxw0r_BmRP5ytn5BMvc9m6bYczxSPAs-ukmxFwn71VWi0--Y0TDi_sbGJxk6EqPGrT_f5LO-wSTtoIPx9GTa9sEe7WFuOFDNirT0CVtY--6fPPAhmxYRgsHR5lsMX1eQaSom6LDN7s_9M9lXK6n4TEPyJRJznrz4rfBHb95qlvpEh5ocbztgNOiANUrigbsmg2YNRF786Ry84gBV5uIKnxABMYrGnGXlfaUc_PggB-4tr"
-  },
-  {
-    id: 4,
-    category: "Living",
-    name: "Orbita Mini Speaker",
-    price: 120.00,
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZthvRgTEDcBNKaoPIlJdoaenq2LqjLjO6LtlDCDAMXAbOmY2q_JDZcD450MBU2Tk4ygCO6DGZAvv1_hitI8astdR_C9Edc64llNH4_F3kEQ3yc4LD52zwm_oVLU4pGgyUBcXVyNXOBdZTiRNfulslA2wTXFZfxf4teyOglTx6RxyxJhGLA8ctRYa4lkOpca4bCt2GGQURkqnpUMBo_kg4ATnwe2Iu9fmWZi_rxyxmFat3m3hC9Q-n06E7c349P30XCJrMI2MK3Ouv"
-  }
-];
+// const PRODUCTS = [
+//   {
+//     id: 1,
+//     tag: "Limited",
+//     category: "Elite Series",
+//     name: "Classic Canvas High",
+//     price: 180.00,
+//     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBU9SXpJnH6zQi5mIm-Y24eoX47KHq3M3yXI4-OYwLHTFFDQ6RwOuJytmOk9llffCOIjw0vphtP_8wHjMn-uOJ7SJqBVzItBn39qHFb4_WwOLjnYWOs-UB5EIAbcXKMOxO_lU57ZBTeznH6r2vfDfeev0LhVCM-blGSDsq31U0IGF18IeCck-fCvQ2nRMDwO-UQ97wwFGVSzNBEEMbxkO6-a08q3g8CdHg9Bcgs_xZrTf3KrvvI9kFFnQJXMei1qdzCzbnEuD1cIVu6"
+//   },
+//   {
+//     id: 2,
+//     category: "Wearables",
+//     name: "Elite Series 4 Watch",
+//     price: 450.00,
+//     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBc5wfa4z7WWIj_I4AwMb4hVIWz1177vDeR1uJKkVsVG_KY_06NrsQYCl7YQq__0FkylPBJq_BpduS6oC53NA7B4LvhFfz777dYSxkn273IWEY3q6v7ohZlIACL8bEvC0HFNGE3BWJ2EO-2mdo3E8IIH9v_khQKtGTtJWmj3TPoASWkOCYeqKAS0-KeCjA15oq5SqwdG_SvpjkXVLE21qaJVY5c6rcJaOWznP5uyxdbcYfQF62pWN0FMGiHuLC4_uSdVFGvbPPGPuRq"
+//   },
+//   {
+//     id: 3,
+//     tag: "New",
+//     category: "Accessories",
+//     name: "Linear Frame Sun",
+//     price: 210.00,
+//     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDk9TxvaaqFvM6Kp-VQb8lcC9fcXqrmfYcOxw0r_BmRP5ytn5BMvc9m6bYczxSPAs-ukmxFwn71VWi0--Y0TDi_sbGJxk6EqPGrT_f5LO-wSTtoIPx9GTa9sEe7WFuOFDNirT0CVtY--6fPPAhmxYRgsHR5lsMX1eQaSom6LDN7s_9M9lXK6n4TEPyJRJznrz4rfBHb95qlvpEh5ocbztgNOiANUrigbsmg2YNRF786Ry84gBV5uIKnxABMYrGnGXlfaUc_PggB-4tr"
+//   },
+//   {
+//     id: 4,
+//     category: "Living",
+//     name: "Orbita Mini Speaker",
+//     price: 120.00,
+//     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZthvRgTEDcBNKaoPIlJdoaenq2LqjLjO6LtlDCDAMXAbOmY2q_JDZcD450MBU2Tk4ygCO6DGZAvv1_hitI8astdR_C9Edc64llNH4_F3kEQ3yc4LD52zwm_oVLU4pGgyUBcXVyNXOBdZTiRNfulslA2wTXFZfxf4teyOglTx6RxyxJhGLA8ctRYa4lkOpca4bCt2GGQURkqnpUMBo_kg4ATnwe2Iu9fmWZi_rxyxmFat3m3hC9Q-n06E7c349P30XCJrMI2MK3Ouv"
+//   }
+// ];
 
 export default function App() {
+  const { products, isLoading, error, refetch } = useProducts()
+  console.log(products);
+  const PRODUCTS = products?.data?.slice(0, 4) || [];
   return (
     <div className="min-h-screen text-black mx-6">
 
@@ -98,7 +95,7 @@ export default function App() {
           
           <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 h-auto md:h-[600px]">
             {/* Main Category */}
-            <div className="md:col-span-2 lg:col-span-3 relative group overflow-hidden rounded-lg bg-slate-100 h-80 md:h-full">
+            <Link href="search?q=shoes" className="md:col-span-2 lg:col-span-3 relative group overflow-hidden rounded-lg bg-slate-100 h-80 md:h-full">
               <img 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMilZaU2I8w22hQoUslfhJzEAfzvnVQjc8NPX5s5dE0FFOjgXR83ItW0s42r3EpUxqVHdaHZrXRbmzHRGpcsUQnRzpuh7UroORbe2dmk6fL0XszvyyhX-ldIh4czTl2nDU_aJ9gGabcIWkyUjTeoMFagfZtM_m5EouC0YDdqDXrhpHj7WGmL45FAjxmxInu-uf3JMs6lD7ZHKqnK_DkzffNYLIPgwBRBEvJ957Lll-DKP8_AAMwd-A2eKSJrlYBPsBBr4Ou3J1s5wJ" 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -111,10 +108,10 @@ export default function App() {
                   Browse Category <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </a>
               </div>
-            </div>
+            </Link>
 
             {/* Audio Category */}
-            <div className="md:col-span-2 lg:col-span-3 relative group overflow-hidden rounded-lg bg-slate-100 h-80 md:h-full">
+            <Link href="search?q=headphones" className="md:col-span-2 lg:col-span-3 relative group overflow-hidden rounded-lg bg-slate-100 h-80 md:h-full">
               <img 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuASsF16zFDs1vXt8_YpmnnEEYCetQWoR2Qc6vI_Dm1Lo12LlK2qiwZACjnCWp0yvkpvpEttzSq5aeHojcVMcI_a-u-jpc5IVjYeBeOExu69mBrTCJmxaHt28xaND32X3cfQKfV2oYjzb8woB5LLXNRlutR2OdEKgzzE0F7OhHPaIGXq70GH96hSVB-0lU2rRIYmbWt2Bvc67C-RTHULpN-s6kcLWJ9rScxUbo69JNf8_dkmxI1lFISX45wJ7j2ovbyGSflbevhF8NWe" 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -127,10 +124,10 @@ export default function App() {
                   Browse Category <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </a>
               </div>
-            </div>
+            </Link>
 
             {/* Sub Categories */}
-            <div className="md:col-span-2 lg:col-span-2 relative group overflow-hidden rounded-lg bg-slate-100 h-80 md:h-full">
+            <Link href="search?q=carry" className="md:col-span-2 lg:col-span-2 relative group overflow-hidden rounded-lg bg-slate-100 h-80 md:h-full">
               <img 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuApUb04-eAZS1qUsk9Ak-rYhRuAG3DiQtWWRdeioMjB0JdqbXVjvBGPPNLgSuiboCszgCwE_Ws4AvbmPx-9LwIwMKLGMulo0p-w0JzkLRp2ZqVC_ZpojhuRvcoFmImc_F_DeynLcWvdaUEjbR18mu2P0mN-Q-S6nT0ahVVw64PUxF211gzXxy_8C_XAh_zgqCSb5gWpsbILVt3yDb7jiDBGIK95Ao80NMeZZm2l8x6tSOghnvbyltdIVEVawqvUaDXnRHVUB21Gm2xg" 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -143,9 +140,9 @@ export default function App() {
                   Explore <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
                 </a>
               </div>
-            </div>
+            </Link>
 
-            <div className="md:col-span-2 lg:col-span-4 relative group overflow-hidden rounded-lg bg-slate-100 h-80 md:h-full">
+            <Link href="search" className="md:col-span-2 lg:col-span-4 relative group overflow-hidden rounded-lg bg-slate-100 h-80 md:h-full">
               <img 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5r9CeZ740TwkFJbcx05ASZXJrO1dP3afJsXrMTR3cyh0IW5qSFUfmWfLwQn8TZTc58IMJz4L7KE0mIn-2p2f0eLprv3AhskRYv87XcnCussAUNdkCve6DCe5X_3Y2wjxGIZdYIXuahTuyD9GgNEn0fnQEaQYDZ6aTXJb-4XHbH7fTPHl_QPlYPGdHhUMQP9Wh8WCPsm56sNrYTSiDRMyn-qxjrgzN8UpgKRjFql0jjZSbmTVM-p0W2oCFFax8EDrYLToEIGHIs92Y" 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -153,12 +150,12 @@ export default function App() {
               />
               <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/20 transition-all" />
               <div className="absolute bottom-6 left-6">
-                <h3 className="text-xl font-medium text-white mb-1">Connected Life</h3>
+                <h3 className="text-xl font-medium text-white mb-1">All Products</h3>
                 <a href="#" className="text-white text-xs font-medium border-b border-white pb-1 group inline-flex items-center gap-2">
-                  Shop Devices <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
+                  Explore <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
                 </a>
               </div>
-            </div>
+            </Link>
           </div>
         </section>
 
@@ -171,6 +168,7 @@ export default function App() {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-gutter gap-y-12">
             {PRODUCTS.map((product) => (
+              <Link href={`/product/${product.id}`} key={product.id}>
               <motion.div 
                 key={product.id}
                 whileHover={{ y: -4 }}
@@ -178,7 +176,7 @@ export default function App() {
               >
                 <div className="relative overflow-hidden mb-6 product-card-shadow aspect-[4/5] bg-surface-container">
                   <img 
-                    src={product.image} 
+                    src={getFullImageUrl(product.attachments?.[0]?.url)} 
                     alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
@@ -200,7 +198,7 @@ export default function App() {
                   <h3 className="text-lg font-medium text-on-surface">{product.name}</h3>
                   <p className="text-primary font-bold">${product.price.toFixed(2)}</p>
                 </div>
-              </motion.div>
+              </motion.div></Link>
             ))}
           </div>
         </section>

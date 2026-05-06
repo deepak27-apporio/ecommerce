@@ -8,4 +8,12 @@ export const CATEGORIES = [
   { value: "electronics", label: "Electronics" },
   { value: "headphones", label: "Headphones" },
   { value: "accessories", label: "Accessories" },
+  { value: "carry", label: "Carry Bags" },
+];
+
+export const ORDER_STEPS = [
+  { label: "Confirmed", key: "CREATED", days: 0 },
+  { label: "Processing", key: "PROCESSING", days: 1 },
+  { label: "Shipped", key: "SHIPPED", days: 2 },
+  { label: "Delivered", key: "DELIVERED", days: 4 },
 ];

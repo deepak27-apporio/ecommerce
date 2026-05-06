@@ -51,7 +51,7 @@ const Input = ({
 
 export default function CheckoutPage() {
   const [step, setStep] = useState("Information");
-  const { items: cartItems, total, clearCart } = useCart();
+  const { items: cartItems, total } = useCart();
 
   const {
     register,
@@ -98,7 +98,6 @@ export default function CheckoutPage() {
 
       openRazorpay(res);
       toast.success("Order placed successfully!");
-      clearCart?.();
       setStep("Shipping");
     } catch (err: any) {
       toast.error(err?.message || "Failed to place order. Please try again.");
