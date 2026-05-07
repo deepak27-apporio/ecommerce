@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { AiFillFileText } from "react-icons/ai";
 import { HiMenuAlt4 } from "react-icons/hi";
 import { RiDashboardFill, RiShoppingBag3Fill } from "react-icons/ri";
@@ -139,4 +139,4 @@ const Li = ({ url, text, pathname, Icon }: MenuItem & { pathname: string }) => {
   );
 };
 
-export default AdminSidebar;
+export default memo(AdminSidebar);

@@ -19,3 +19,12 @@ export const getAllOrders = async (params?: ProductQueryParams) => {
     throw error?.response?.data;
   }
 };
+
+export const updateOrderStatus = async (orderId: string, status: string) => {
+  try {
+    const res = await api.put(`/admin/order/${orderId}`, { status });
+    return res.data;
+  } catch (error: any) {
+    throw error?.response?.data;
+  }
+};

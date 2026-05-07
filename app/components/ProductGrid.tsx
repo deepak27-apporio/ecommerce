@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "./ProductCard";
+import { memo } from "react";
 
 interface Pagination {
   total: number;
@@ -18,7 +19,7 @@ interface ProductGridProps {
   // onSortByChange: (sortBy: string) => void;
 }
 
-export default function ProductGrid({ products, currentPage, onPageChange }: ProductGridProps) {
+function ProductGrid({ products, currentPage, onPageChange }: ProductGridProps) {
   const pagination = products?.pagination;
   const totalPages = pagination?.totalPages ?? 1;
 
@@ -93,3 +94,6 @@ export default function ProductGrid({ products, currentPage, onPageChange }: Pro
     </div>
   );
 }
+
+export default memo(ProductGrid)
+

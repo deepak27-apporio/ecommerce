@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { getFullImageUrl } from '../utils/features';
+import { memo } from 'react';
 
 interface OrderCardProps {
   id: string;
@@ -11,7 +12,7 @@ interface OrderCardProps {
   extraCount?: number;
 }
 
-export default function OrderCard(orders: OrderCardProps) {
+function OrderCard(orders: OrderCardProps) {
   const statusStyles = {
     'Delivered': 'bg-green-50 text-green-700',
     'In Transit': 'bg-amber-50 text-amber-700',
@@ -71,3 +72,5 @@ export default function OrderCard(orders: OrderCardProps) {
     </motion.div>
   );
 }
+
+export default memo(OrderCard)

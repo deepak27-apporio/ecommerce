@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Product } from "../types/types";
 import { getFullImageUrl } from "../utils/features";
 import Link from "next/link";
+import { memo } from "react";
 
 interface CartItemProps {
   item: Product;
@@ -10,7 +11,7 @@ interface CartItemProps {
   onRemove: (id: number) => void;
 }
 
-export default function CartItemCard({
+ function CartItemCard({
   item,
   onUpdateQuantity,
   onRemove,
@@ -78,3 +79,5 @@ export default function CartItemCard({
     </motion.div>
   );
 }
+
+export default memo(CartItemCard)

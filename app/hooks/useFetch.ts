@@ -5,6 +5,7 @@ interface UseFetchResult<T> {
   isLoading: boolean;
   error: string | null;
   refetch: () => void;
+  setData: (data: T | null) => void;
 }
 
 export function useFetch<T>(
@@ -32,5 +33,5 @@ export function useFetch<T>(
     fetch();
   }, [fetch]);
 
-  return { data, isLoading, error, refetch: fetch };
+  return { data, setData, isLoading, error, refetch: fetch };
 }

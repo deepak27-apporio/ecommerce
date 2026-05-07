@@ -1,12 +1,34 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, memo } from "react";
+import toast from "react-hot-toast";
+import { updateOrderStatus } from "../api/admin/orderApi";
 
 const ORDER_STEPS = [
-  { label: "Confirmed",   key: "CREATED",    color: "text-gray-600",  bg: "hover:bg-gray-50"   },
-  { label: "Processing",  key: "PROCESSING",  color: "text-amber-600", bg: "hover:bg-amber-50"  },
-  { label: "Shipped",     key: "SHIPPED",     color: "text-blue-600",  bg: "hover:bg-blue-50"   },
-  { label: "Delivered",   key: "DELIVERED",   color: "text-green-600", bg: "hover:bg-green-50"  },
+  {
+    label: "Confirmed",
+    key: "CREATED",
+    color: "text-gray-600",
+    bg: "hover:bg-gray-50",
+  },
+  {
+    label: "Processing",
+    key: "PROCESSING",
+    color: "text-amber-600",
+    bg: "hover:bg-amber-50",
+  },
+  {
+    label: "Shipped",
+    key: "SHIPPED",
+    color: "text-blue-600",
+    bg: "hover:bg-blue-50",
+  },
+  {
+    label: "Delivered",
+    key: "DELIVERED",
+    color: "text-green-600",
+    bg: "hover:bg-green-50",
+  },
 ];
 
 interface Props {
@@ -20,7 +42,6 @@ const OrderActionDropdown = ({ orderId, currentStatus }: Props) => {
   const [status, setStatus] = useState(currentStatus);
   const ref = useRef<HTMLDivElement>(null);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -39,12 +60,13 @@ const OrderActionDropdown = ({ orderId, currentStatus }: Props) => {
 
     try {
       setLoading(true);
-      // ✅ Apna API call yahan lagao
-      // await updateOrderStatus(orderId, key);
+      await updateOrderStatus(orderId, key);
       setStatus(key);
       setOpen(false);
-    } catch (err) {
-      console.error("Failed to update status", err);
+    } catch (err: any) {
+      toast.error(
+        err.message || "Failed to update order status. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -63,19 +85,33 @@ const OrderActionDropdown = ({ orderId, currentStatus }: Props) => {
         {loading ? (
           <span className="w-3 h-3 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
         ) : (
-          <span className={`w-2 h-2 rounded-full ${
-            status === "CREATED"    ? "bg-gray-500"   :
-            status === "PROCESSING" ? "bg-amber-500"  :
-            status === "SHIPPED"    ? "bg-blue-500"   :
-            status === "DELIVERED"  ? "bg-green-500"  : "bg-gray-400"
-          }`} />
+          <span
+            className={`w-2 h-2 rounded-full ${
+              status === "CREATED"
+                ? "bg-gray-500"
+                : status === "PROCESSING"
+                  ? "bg-amber-500"
+                  : status === "SHIPPED"
+                    ? "bg-blue-500"
+                    : status === "DELIVERED"
+                      ? "bg-green-500"
+                      : "bg-gray-400"
+            }`}
+          />
         )}
         <span>{current?.label ?? "Manage"}</span>
         <svg
           className={`w-3 h-3 text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}
-          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
@@ -85,7 +121,9 @@ const OrderActionDropdown = ({ orderId, currentStatus }: Props) => {
           <div className="py-1">
             {ORDER_STEPS.map((step, index) => {
               const isCurrent = step.key === status;
-              const currentIndex = ORDER_STEPS.findIndex((s) => s.key === status);
+              const currentIndex = ORDER_STEPS.findIndex(
+                (s) => s.key === status,
+              );
               const isPast = index < currentIndex;
 
               return (
@@ -99,19 +137,34 @@ const OrderActionDropdown = ({ orderId, currentStatus }: Props) => {
                   `}
                 >
                   {/* Step indicator */}
-                  <span className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                    step.key === "CREATED"    ? "bg-gray-400"   :
-                    step.key === "PROCESSING" ? "bg-amber-400"  :
-                    step.key === "SHIPPED"    ? "bg-blue-400"   :
-                    "bg-green-400"
-                  }`} />
+                  <span
+                    className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                      step.key === "CREATED"
+                        ? "bg-gray-400"
+                        : step.key === "PROCESSING"
+                          ? "bg-amber-400"
+                          : step.key === "SHIPPED"
+                            ? "bg-blue-400"
+                            : "bg-green-400"
+                    }`}
+                  />
 
                   <span className={step.color}>{step.label}</span>
 
                   {/* Checkmark for current */}
                   {isCurrent && (
-                    <svg className="ml-auto w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    <svg
+                      className="ml-auto w-4 h-4 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                   )}
                 </button>
@@ -125,9 +178,23 @@ const OrderActionDropdown = ({ orderId, currentStatus }: Props) => {
               href={`/admin/transaction/${orderId}`}
               className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-500 hover:bg-gray-50 transition-colors"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7..." />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7..."
+                />
               </svg>
               View Detail
             </a>
@@ -138,4 +205,4 @@ const OrderActionDropdown = ({ orderId, currentStatus }: Props) => {
   );
 };
 
-export default OrderActionDropdown;
+export default memo(OrderActionDropdown);

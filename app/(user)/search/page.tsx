@@ -124,6 +124,7 @@ export default function SearchPage() {
             onCategoryToggle={handleCategoryToggle}
             priceRange={priceRange}
             onPriceRangeChange={handlePriceRangeChange}
+            clearFilters={clearFilters}
           />
 
           {isLoading ? (

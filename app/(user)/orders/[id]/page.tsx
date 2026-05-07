@@ -247,7 +247,7 @@ const page = () => {
               </div>
 
               {/* Payment Method */}
-              <div className="pt-8 border-t border-slate-100">
+              {/* <div className="pt-8 border-t border-slate-100">
                 <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">
                   Payment Method
                 </h4>
@@ -264,7 +264,7 @@ const page = () => {
                     <p className="text-slate-500 text-xs mt-0.5">Exp: 09/27</p>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* Need Help */}
               <div className="pt-8 border-t border-slate-100">

@@ -2,13 +2,14 @@ import { ShoppingCart } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Product } from '../types/types';
 import Link from 'next/link';
+import { memo } from 'react';
 
 interface ProductCardProps {
   product: Product;
   key?: string | number;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+function ProductCard({ product }: ProductCardProps) {
   return (
      <Link
       href={`/product/${product.id}`}
@@ -66,3 +67,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     </Link>
   );
 }
+
+export default memo(ProductCard)
+
+

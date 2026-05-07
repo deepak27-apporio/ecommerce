@@ -1,52 +1,54 @@
 "use client";
 
-import { FaRegBell } from "react-icons/fa";
-import { BsSearch } from "react-icons/bs";
 import { BiMaleFemale } from "react-icons/bi";
 import { HiTrendingDown, HiTrendingUp } from "react-icons/hi";
-import { adminUser, last6Months, stats } from "@/app/lib/dummy-data";
+import { last6Months, stats } from "@/app/lib/dummy-data";
 import { BarChart, DoughnutChart } from "@/app/components/admin/Charts";
+import { useFetch } from "@/app/hooks/useFetch";
+import { getDashboardData } from "@/app/api/admin/dashboard";
 
 const Dashboard = () => {
+  const {data} = useFetch(()=>getDashboardData(),[])
+  console.log("data",data)
   return (
       <main className="dashboard">
-        <div className="bar">
+        {/* <div className="bar">
           <BsSearch />
           <input type="text" placeholder="Search for data, users, docs" />
           <FaRegBell />
           <img src={adminUser.photo} alt={adminUser.name} />
-        </div>
+        </div> */}
 
         <section className="widget-container">
           <WidgetItem
             percent={stats.changePercent.revenue}
             amount
-            value={stats.count.revenue}
+            value={data?.totalRevenue}
             heading="Revenue"
             color="rgb(0, 115, 255)"
           />
           <WidgetItem
             percent={stats.changePercent.user}
-            value={stats.count.user}
+            value={data?.totalUser}
             color="rgb(0 198 202)"
             heading="Users"
           />
           <WidgetItem
             percent={stats.changePercent.order}
-            value={stats.count.order}
+            value={data?.totalOrders}
             color="rgb(255 196 0)"
-            heading="Transactions"
+            heading="Total orders"
           />
           <WidgetItem
             percent={stats.changePercent.product}
-            value={stats.count.product}
+            value={data?.totalProduct}
             color="rgb(76 0 255)"
             heading="Products"
           />
         </section>
 
         <section className="graph-container">
-          <div className="revenue-chart">
+          {/* <div className="revenue-chart">
             <h2>Revenue & Transaction</h2>
             <BarChart
               labels={last6Months}
@@ -57,13 +59,14 @@ const Dashboard = () => {
               bgColor_1="rgb(0, 115, 255)"
               bgColor_2="rgba(53, 162, 235, 0.8)"
             />
-          </div>
+          </div> */}
 
           <div className="dashboard-categories">
             <h2>Inventory</h2>
             <div>
-              {stats.categoryCount.map((item) => {
-                const [heading, value] = Object.entries(item)[0];
+              {data?.categoryStock?.map((item) => {
+                const heading = item?.category
+                const value = item?.totalStock
                 return (
                   <CategoryItem
                     key={heading}
@@ -75,14 +78,11 @@ const Dashboard = () => {
               })}
             </div>
           </div>
-        </section>
-
-        <section className="transaction-container">
           <div className="gender-chart">
             <h2>Gender Ratio</h2>
             <DoughnutChart
               labels={["Female", "Male"]}
-              data={[stats.userRatio.female, stats.userRatio.male]}
+              data={[data?.totalFemale, data?.totalMale]}
               backgroundColor={["hsl(340, 82%, 56%)", "rgba(53, 162, 235, 0.8)"]}
               cutout={80}
             />
@@ -91,6 +91,21 @@ const Dashboard = () => {
             </p>
           </div>
         </section>
+
+        {/* <section className="transaction-container">
+          <div className="gender-chart">
+            <h2>Gender Ratio</h2>
+            <DoughnutChart
+              labels={["Female", "Male"]}
+              data={[data?.totalFemale, data?.totalMale]}
+              backgroundColor={["hsl(340, 82%, 56%)", "rgba(53, 162, 235, 0.8)"]}
+              cutout={80}
+            />
+            <p>
+              <BiMaleFemale />
+            </p>
+          </div>
+        </section> */}
       </main>
   );
 };
@@ -113,7 +128,7 @@ const WidgetItem = ({
   <article className="widget">
     <div className="widget-info">
       <p>{heading}</p>
-      <h4>{amount ? `Rs ${value.toLocaleString("en-IN")}` : value}</h4>
+      <h4>{amount ? `Rs ${value?.toLocaleString("en-IN")}` : value}</h4>
       {percent > 0 ? (
         <span className="green">
           <HiTrendingUp /> +{`${percent > 10000 ? 9999 : percent}%`}

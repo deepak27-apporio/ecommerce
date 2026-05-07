@@ -9,7 +9,7 @@ import {
   FaTachometerAlt,
   FaBoxOpen,
 } from "react-icons/fa";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, memo } from "react";
 import toast from "react-hot-toast";
 import { logout } from "../api/authApi";
 import { useRouter } from "next/navigation";
@@ -152,4 +152,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default memo(Header);

@@ -1,5 +1,3 @@
-// app/api/search.ts
-
 import { api } from "./axios";
 
 export const aiSearchApi = async (query: string) => {

@@ -1,12 +1,10 @@
 "use client";
 import {  
-  Instagram, 
-  Twitter, 
-  Facebook,
   Mail,
   Globe,
   Share2
 } from "lucide-react";
+import { memo } from "react";
 
 const Footer = () => {
   return (
@@ -51,17 +49,17 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="pt-12 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+          <div className="pt-8 border-t border-slate-200 flex justify-center md:flex-row justify-between items-center gap-6 text-[10px] font-bold uppercase tracking-widest text-slate-400">
             <p>© 2026 MODERN ELITE. All Rights Reserved.</p>
-            <div className="flex gap-8">
+            {/* <div className="flex gap-8">
               <a href="#" className="hover:text-on-surface">Instagram</a>
               <a href="#" className="hover:text-on-surface">Twitter</a>
               <a href="#" className="hover:text-on-surface">Facebook</a>
-            </div>
+            </div> */}
           </div>
         </div>
       </footer>
   )
 }
 
-export default Footer
+export default memo(Footer)

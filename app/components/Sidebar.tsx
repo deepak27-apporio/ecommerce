@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { CATEGORIES } from "../types/Constants";
 
 interface SidebarProps {
@@ -7,16 +7,22 @@ interface SidebarProps {
   onCategoryToggle: (category: string) => void;
   priceRange: [number, number];
   onPriceRangeChange: (range: [number, number]) => void;
+  clearFilters:()=>any;
 }
 
-export default function Sidebar({
+ function Sidebar({
   selectedCategories,
   onCategoryToggle,
   priceRange,
   onPriceRangeChange,
+  clearFilters
 }: SidebarProps) {
-  const [localMin, setLocalMin] = useState(priceRange[0] > 0 ? String(priceRange[0]) : "");
-  const [localMax, setLocalMax] = useState(priceRange[1] < 200000 ? String(priceRange[1]) : "");
+  const [localMin, setLocalMin] = useState(
+    priceRange[0] > 0 ? String(priceRange[0]) : "",
+  );
+  const [localMax, setLocalMax] = useState(
+    priceRange[1] < 200000 ? String(priceRange[1]) : "",
+  );
 
   useEffect(() => {
     setLocalMin(priceRange[0] > 0 ? String(priceRange[0]) : "");
@@ -32,12 +38,16 @@ export default function Sidebar({
   return (
     <aside className="w-full lg:w-64 space-y-10 text-black">
       <section>
-        <h3 className="text-[12px] uppercase tracking-[0.2em] text-on-surface font-bold mb-6">
-          Categories
-        </h3>
+        <div className="flex justify-between ">
+          <h3 className="text-[12px] uppercase tracking-[0.2em] text-on-surface font-bold mb-6">Categories</h3>
+          <h6 className="underline text-red-400 cursor-pointer mb-6" onClick={clearFilters}>Clear all filter</h6>
+        </div>
         <div className="space-y-4">
           {CATEGORIES.map((category, indx) => (
-            <label key={indx} className="flex items-center group cursor-pointer">
+            <label
+              key={indx}
+              className="flex items-center group cursor-pointer"
+            >
               <input
                 type="checkbox"
                 checked={selectedCategories.includes(category.value)}
@@ -79,7 +89,9 @@ export default function Sidebar({
                 className="w-full px-3 py-2 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary rounded-sm"
               />
             </div>
-            <span className="text-on-surface-variant pb-2.5 font-medium">—</span>
+            <span className="text-on-surface-variant pb-2.5 font-medium">
+              —
+            </span>
             <div className="flex-1">
               <label className="text-[11px] text-on-surface-variant font-medium mb-1 block">
                 Max
@@ -104,3 +116,4 @@ export default function Sidebar({
     </aside>
   );
 }
+export default memo(Sidebar)

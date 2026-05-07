@@ -44,4 +44,4 @@ const Slider = ({ images }: SliderProps) => {
   );
 };
 
-export default Slider;
+export default memo(Slider);
