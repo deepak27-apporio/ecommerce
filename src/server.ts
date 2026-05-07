@@ -15,6 +15,7 @@ import cookieParser from "cookie-parser";
 
 dotenv.config();
 const app: Application = express();
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
