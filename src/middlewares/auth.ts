@@ -3,12 +3,9 @@ import { Request, Response, NextFunction } from "express";
 import { verifyAccessToken } from "../utils/jwt.js";
 import { StatusCodes } from "../utils/apiResponse.js";
 
-export interface AuthRequest extends Request {
-  user?: { id: string | number; role?: string };
-}
 
 export const isAuthenticated = (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) => {
@@ -22,20 +19,27 @@ export const isAuthenticated = (
     }
 
     const decoded = verifyAccessToken(accessToken);
-    req.user = decoded;
+    req.user = {
+      id: Number(decoded.id),
+      role: decoded.role,
+    };
 
     return next();
   } catch (error) {
     console.log("Authentication error:", error);
-    return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Invalid or expired token" });
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: "Invalid or expired token" });
   }
 };
 
 export const authorizeRoles = (...roles: string[]) => {
-  return (req: AuthRequest, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     console.log("Authorizing roles:", roles, "for user:", req.user);
     if (!req.user || !req.user.role) {
-      return res.status(StatusCodes.FORBIDDEN).json({ message: "Access denied" });
+      return res
+        .status(StatusCodes.FORBIDDEN)
+        .json({ message: "Access denied" });
     }
 
     if (!roles.includes(req.user.role)) {

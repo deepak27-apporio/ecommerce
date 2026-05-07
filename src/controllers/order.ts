@@ -8,7 +8,13 @@ import crypto from "crypto";
 export const CreateOrder = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const { addressId, address, items, tax, shipping } = req.body;
-    const userId = req.user.id;
+
+    if (!req.user) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
+  }
+
+    const userId = req?.user?.id;
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user)
@@ -234,6 +240,10 @@ export const getOrderDetailById = tryCatch(
 
 export const getAllOrders = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
     const orders = await prisma.order.findMany({
       where: { userId: req.user.id },
       include: { items: true, address: true },
