@@ -10,6 +10,10 @@ interface OrderCardProps {
   status: 'Delivered' | 'In Transit' | 'Processing';
   images: string[];
   extraCount?: number;
+  totalAmount?: number;
+  razorpayOrderId:string;
+  createdAt:string;
+  items:any[]
 }
 
 function OrderCard(orders: OrderCardProps) {
@@ -43,7 +47,7 @@ function OrderCard(orders: OrderCardProps) {
           </div>
           <div>
             <p className="text-[12px] font-medium text-slate-400 mb-1 uppercase tracking-widest">Status</p>
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusStyles[status]}`}>
+            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusStyles[orders?.status]}`}>
               {orders?.status}
             </span>
           </div>

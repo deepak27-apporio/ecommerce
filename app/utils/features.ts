@@ -1,4 +1,5 @@
 import { ORDER_STEPS } from "../types/Constants";
+import { CartTotal } from "../types/types";
 
 export const transformImage = (url: string, width = 200) => {
   const newUrl = url?.replace("upload/", `upload/dpr_auto/w_${width}/`);
@@ -10,7 +11,7 @@ export const getFullImageUrl = (url: string) => {
   return `${base}${url}`;
 }
 
-export const calculateTotalPrices = (items: any[]) => {
+export const calculateTotalPrices = (items: { price: number; quantity: number }[]): CartTotal => {
   const subtotal = items.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0,

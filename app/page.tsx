@@ -8,42 +8,8 @@ import Link from "next/link";
 import { useProducts } from "./hooks/useProducts";
 import { getFullImageUrl } from "./utils/features";
 
-// const PRODUCTS = [
-//   {
-//     id: 1,
-//     tag: "Limited",
-//     category: "Elite Series",
-//     name: "Classic Canvas High",
-//     price: 180.00,
-//     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBU9SXpJnH6zQi5mIm-Y24eoX47KHq3M3yXI4-OYwLHTFFDQ6RwOuJytmOk9llffCOIjw0vphtP_8wHjMn-uOJ7SJqBVzItBn39qHFb4_WwOLjnYWOs-UB5EIAbcXKMOxO_lU57ZBTeznH6r2vfDfeev0LhVCM-blGSDsq31U0IGF18IeCck-fCvQ2nRMDwO-UQ97wwFGVSzNBEEMbxkO6-a08q3g8CdHg9Bcgs_xZrTf3KrvvI9kFFnQJXMei1qdzCzbnEuD1cIVu6"
-//   },
-//   {
-//     id: 2,
-//     category: "Wearables",
-//     name: "Elite Series 4 Watch",
-//     price: 450.00,
-//     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBc5wfa4z7WWIj_I4AwMb4hVIWz1177vDeR1uJKkVsVG_KY_06NrsQYCl7YQq__0FkylPBJq_BpduS6oC53NA7B4LvhFfz777dYSxkn273IWEY3q6v7ohZlIACL8bEvC0HFNGE3BWJ2EO-2mdo3E8IIH9v_khQKtGTtJWmj3TPoASWkOCYeqKAS0-KeCjA15oq5SqwdG_SvpjkXVLE21qaJVY5c6rcJaOWznP5uyxdbcYfQF62pWN0FMGiHuLC4_uSdVFGvbPPGPuRq"
-//   },
-//   {
-//     id: 3,
-//     tag: "New",
-//     category: "Accessories",
-//     name: "Linear Frame Sun",
-//     price: 210.00,
-//     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDk9TxvaaqFvM6Kp-VQb8lcC9fcXqrmfYcOxw0r_BmRP5ytn5BMvc9m6bYczxSPAs-ukmxFwn71VWi0--Y0TDi_sbGJxk6EqPGrT_f5LO-wSTtoIPx9GTa9sEe7WFuOFDNirT0CVtY--6fPPAhmxYRgsHR5lsMX1eQaSom6LDN7s_9M9lXK6n4TEPyJRJznrz4rfBHb95qlvpEh5ocbztgNOiANUrigbsmg2YNRF786Ry84gBV5uIKnxABMYrGnGXlfaUc_PggB-4tr"
-//   },
-//   {
-//     id: 4,
-//     category: "Living",
-//     name: "Orbita Mini Speaker",
-//     price: 120.00,
-//     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZthvRgTEDcBNKaoPIlJdoaenq2LqjLjO6LtlDCDAMXAbOmY2q_JDZcD450MBU2Tk4ygCO6DGZAvv1_hitI8astdR_C9Edc64llNH4_F3kEQ3yc4LD52zwm_oVLU4pGgyUBcXVyNXOBdZTiRNfulslA2wTXFZfxf4teyOglTx6RxyxJhGLA8ctRYa4lkOpca4bCt2GGQURkqnpUMBo_kg4ATnwe2Iu9fmWZi_rxyxmFat3m3hC9Q-n06E7c349P30XCJrMI2MK3Ouv"
-//   }
-// ];
-
 export default function App() {
   const { products, isLoading, error, refetch } = useProducts()
-  console.log(products);
   const PRODUCTS = products?.data?.slice(0, 4) || [];
   return (
     <div className="min-h-screen text-black mx-6">
@@ -167,7 +133,7 @@ export default function App() {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-gutter gap-y-12">
-            {PRODUCTS.map((product) => (
+            {PRODUCTS.map((product:any) => (
               <Link href={`/product/${product.id}`} key={product.id}>
               <motion.div 
                 key={product.id}

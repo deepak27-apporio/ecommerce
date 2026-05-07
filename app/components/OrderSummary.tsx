@@ -1,13 +1,9 @@
 import { Lock, Truck } from 'lucide-react';
-import { CartTotals } from '../types';
 import Link from 'next/link';
 import { memo } from 'react';
 
-interface OrderSummaryProps {
-  totals: CartTotals;
-}
 
- function OrderSummary({ totals }: OrderSummaryProps) {
+ function OrderSummary({ totals }: any) {
   return (
     <aside className="lg:col-span-4 sticky top-24">
       <div className="bg-slate-50 rounded-xl p-8 border border-slate-100">

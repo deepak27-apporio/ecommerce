@@ -10,12 +10,14 @@ import {
   SetStateAction,
 } from "react";
 import { DecryptData } from "../utils/EncryptDecrypt";
+import { Address } from "../types/types";
 
 export type User = {
   id: string;
   name: string;
   email: string;
   role: "admin" | "user";
+  addresses?: Address[];
 };
 
 interface AuthState {

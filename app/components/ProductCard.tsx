@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { memo } from 'react';
 
 interface ProductCardProps {
-  product: Product;
+  product: any;
   key?: string | number;
 }
 
@@ -29,17 +29,17 @@ function ProductCard({ product }: ProductCardProps) {
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
 
-          {product.badge && (
+          {product?.badge && (
             <span
               className={`absolute top-4 left-4 text-[10px] font-bold uppercase tracking-widest px-2 py-1 ${
-                product.badge === "New"
+                product?.badge === "New"
                   ? "bg-primary text-white"
-                  : product.badge === "Limited"
+                  : product?.badge === "Limited"
                     ? "bg-slate-900 text-white"
                     : "bg-red-600 text-white"
               }`}
             >
-              {product.badge}
+              {product?.badge}
             </span>
           )}
 

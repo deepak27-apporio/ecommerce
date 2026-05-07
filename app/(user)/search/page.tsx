@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { Search } from "lucide-react";
 import { motion } from "motion/react";
 import { ProductGridSkeleton } from "@/app/components/skeleton/ProductCardSkeleton";
@@ -9,6 +9,14 @@ import { useProducts } from "@/app/hooks/useProducts";
 import { useSearchParams } from "next/navigation";
 
 export default function SearchPage() {
+  return (
+    <Suspense fallback={<ProductGridSkeleton count={6} />}>
+      <SearchPageContent />
+    </Suspense>
+  );
+}
+
+function SearchPageContent() {
   const searchParams = useSearchParams();
   const q = searchParams.get("q");
   const [searchInput, setSearchInput] = useState("");

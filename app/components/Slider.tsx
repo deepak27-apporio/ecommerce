@@ -2,7 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 type SliderProps = {
   images: string[];

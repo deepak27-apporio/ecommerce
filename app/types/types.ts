@@ -1,5 +1,23 @@
 import { useForm } from "react-hook-form";
 
+export interface CartTotal {
+  subtotal: number;
+  tax: number;
+  shipping: number;
+  total: number;
+}
+
+export interface Address {
+  id: number;
+  fullName: string;
+  phone: string;
+  line1: string;
+  line2?: string;
+  city: string;
+  state: string;
+  postalCode: string;
+}
+
 export interface Attachment {
   id: number;
   fileId: string;
@@ -27,7 +45,7 @@ export interface Product {
 
 export interface CartState {
   items: Product[];
-  total: number;
+  total: CartTotal;
   count: number;
 }
 

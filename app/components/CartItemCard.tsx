@@ -39,9 +39,9 @@ interface CartItemProps {
           <div>
             <span className="label-sm text-primary">{item.category}</span>
             <h3 className="h3 mt-1">{item.name}</h3>
-            <p className="text-on-surface-variant text-sm mt-1">
-              {item.variant}
-            </p>
+            {/* <p className="text-on-surface-variant text-sm mt-1">
+              {item?.variant!}
+            </p> */}
           </div>
           <span className="h3">₹{item.price.toFixed(2)}</span>
         </div>

@@ -58,13 +58,12 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       return state;
   }
 
-  // const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
-  const total: any = calculateTotalPrices(items);
+  const total = calculateTotalPrices(items);
   const count = items.reduce((sum, i) => sum + i.quantity, 0);
   return { items, total, count };
 };
 
-const initialState: CartState = { items: [], total: 0, count: 0 };
+const initialState: CartState = { items: [], total: { subtotal: 0, tax: 0, shipping: 0, total: 0 }, count: 0 };
 
 const CartContext = createContext<CartContextType | null>(null);
 

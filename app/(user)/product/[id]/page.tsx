@@ -14,7 +14,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
 const ProductPage = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const {
     data: product,
     isLoading,

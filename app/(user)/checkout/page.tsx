@@ -7,21 +7,10 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useCart } from "@/app/context/CartContext";
 import { toast } from "react-hot-toast";
-import { InputProps, ShippingFormValues } from "@/app/types/types";
+import { Address, InputProps, ShippingFormValues } from "@/app/types/types";
 import { createOrder, openRazorpay } from "@/app/api/order";
 import { useAuth } from "@/app/context/AuthContext";
 import { getFullImageUrl } from "@/app/utils/features";
-
-interface SavedAddress {
-  id: number;
-  fullName: string;
-  phone: string;
-  line1: string;
-  line2?: string;
-  city: string;
-  state: string;
-  postalCode: string;
-}
 
 const Input = ({ label, placeholder, type = "text", className = "", error, registration }: InputProps) => (
   <div className={`relative flex flex-col gap-1.5 ${className}`}>
@@ -45,7 +34,7 @@ const AddressCard = ({
   selected,
   onSelect,
 }: {
-  address: SavedAddress;
+  address: Address;
   selected: boolean;
   onSelect: () => void;
 }) => (
@@ -85,7 +74,7 @@ export default function CheckoutPage() {
   const { user } = useAuth();
   const { items: cartItems, total } = useCart();
 
-  const savedAddresses: SavedAddress[] = user?.addresses ?? [];
+  const savedAddresses: Address[] = user?.addresses ?? [];
   const defaultSelection = savedAddresses.length > 0 ? `saved-${savedAddresses[0].id}` : "new";
   const [selectedAddress, setSelectedAddress] = useState<string>(defaultSelection);
 
@@ -104,47 +93,39 @@ export default function CheckoutPage() {
 
   const onSubmit = async (values: ShippingFormValues) => {
     try {
-      let payload: any;
-      if (isNewAddress) {
-        payload = {
-          address: {
-            fullName: values.fullName,
-            phone: values.phone,
-            line1: values.address,
-            line2: values.apartment ?? "",
-            city: values.city,
-            state: values.state,
-            pincode: values.pinCode,
-          },
-          addressId: 0,
-          items: cartItems?.map((item) => ({
-            productId: item.id,
-            productName: item.name,
-            attachments: item.attachments,
-            productCategory: item.category,
-            quantity: item.quantity,
-            price: item.price,
-          })),
-          tax: total?.tax,
-          shipping: total?.shipping,
-        };
-      } else {
-        const addressId = parseInt(selectedAddress.replace("saved-", ""));
-        payload = {
-          addressId,
-          address: null,
-          items: cartItems?.map((item) => ({
-            productId: item.id,
-            productName: item.name,
-            attachments: item.attachments,
-            productCategory: item.category,
-            quantity: item.quantity,
-            price: item.price,
-          })),
-          tax: total?.tax,
-          shipping: total?.shipping,
-        };
-      }
+      const orderItems = cartItems.map((item) => ({
+        productId: item.id,
+        productName: item.name,
+        attachments: item.attachments,
+        productCategory: item.category,
+        quantity: item.quantity,
+        price: item.price,
+      }));
+
+      const payload = isNewAddress
+        ? {
+            address: {
+              fullName: values.fullName,
+              phone: values.phone,
+              line1: values.address,
+              line2: values.apartment ?? "",
+              city: values.city,
+              state: values.state,
+              pincode: values.pinCode,
+            },
+            addressId: 0,
+            items: orderItems,
+            tax: total.tax,
+            shipping: total.shipping,
+          }
+        : {
+            addressId: parseInt(selectedAddress.replace("saved-", "")),
+            address: null,
+            items: orderItems,
+            tax: total.tax,
+            shipping: total.shipping,
+          };
+
       const res = await createOrder(payload);
       openRazorpay(res);
       toast.success("Order placed successfully!");
@@ -377,21 +358,21 @@ const OrderSummary = () => {
         <div className="flex justify-between text-sm">
           <span className="text-on-surface-variant">Subtotal</span>
           <span className="font-semibold">
-            ₹{total?.subtotal?.toLocaleString("en-IN")}
+            ₹{total.subtotal.toLocaleString("en-IN")}
           </span>
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-on-surface-variant">Tax</span>
           <span className="font-semibold">
-            ₹{total?.tax?.toLocaleString("en-IN")}
+            ₹{total.tax.toLocaleString("en-IN")}
           </span>
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-on-surface-variant">Shipping</span>
           <span className="text-secondary font-medium italic">
-            {total?.shipping === 0
+            {total.shipping === 0
               ? "Free"
-              : `₹${total?.shipping?.toLocaleString("en-IN")}`}
+              : `₹${total.shipping.toLocaleString("en-IN")}`}
           </span>
         </div>
         <div className="flex justify-between items-end pt-4 border-t border-slate-100">
@@ -401,7 +382,7 @@ const OrderSummary = () => {
               INR
             </p>
             <span className="text-2xl font-medium text-on-surface">
-              ₹{total?.total?.toLocaleString("en-IN")}
+              ₹{total.total.toLocaleString("en-IN")}
             </span>
           </div>
         </div>

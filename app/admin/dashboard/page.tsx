@@ -64,7 +64,7 @@ const Dashboard = () => {
           <div className="dashboard-categories">
             <h2>Inventory</h2>
             <div>
-              {data?.categoryStock?.map((item) => {
+              {data?.categoryStock?.map((item:any) => {
                 const heading = item?.category
                 const value = item?.totalStock
                 return (
