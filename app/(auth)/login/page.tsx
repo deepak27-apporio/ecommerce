@@ -35,6 +35,7 @@ export default function LoginPage() {
 
     try {
       const res = await login(data.email, data.password);
+      console.log("res",res)
       if (res.success) {
         router.push("/");
         setState((pre) => ({ ...pre, user: res.user }));

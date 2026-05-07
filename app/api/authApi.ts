@@ -1,14 +1,19 @@
 "use client";
 
+import axios from "axios";
 import { api } from "./axios";
 import { clearToken, setToken } from "./token";
 
 export const login = async (email: string, password: string) => {
   try {
-    const res = await api.post("/auth/login", { email, password });
-    setToken(res?.data?.accessToken);
+    const res = await axios.post("/api/auth/login", {
+      email,
+      password,
+    });
+
+    setToken(res.data.accessToken);
     return res.data;
-  } catch (error:any) {
+  } catch (error: any) {
     throw error?.response?.data;
   }
 };
@@ -25,7 +30,7 @@ export const userRegister = async (FormData: any) => {
 
 export const logout = async () => {
   try {
-    const res = await api.post("/auth/logout");
+    const res = await axios.post("/api/auth/logout");
     clearToken();
     return res.data;
   } catch (error: any) {

@@ -10,12 +10,12 @@ export const api = axios.create({
   withCredentials: true,
 });
 
+// Request interceptor — har request pe accessToken lagao
 api.interceptors.request.use((config) => {
   const token = getToken();
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-
   return config;
 });
 
@@ -27,7 +27,6 @@ const processQueue = (error: any, token: string | null = null) => {
     if (error) prom.reject(error);
     else prom.resolve(token);
   });
-
   failedQueue = [];
 };
 
@@ -52,27 +51,19 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await axios.post(
-          `${API_URL}/auth/refresh`,
-          {},
-          { withCredentials: true },
-        );
-
+        // ✅ Next.js API route call karega
+        const res = await axios.get("/api/auth/refresh");
         const newToken = res.data.accessToken;
 
         setToken(newToken);
-
         processQueue(null, newToken);
-
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
         return api(originalRequest);
       } catch (err) {
-        console.error("Token refresh failed:", err);
         processQueue(err, null);
         clearToken();
-        // window.location.href = "/login";
-
+        window.location.href = "/login";
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
@@ -80,5 +71,5 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
