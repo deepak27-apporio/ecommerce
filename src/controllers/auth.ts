@@ -40,7 +40,7 @@ export const login = tryCatch(
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: true,          // ← HTTPS ke liye zaroori
+      secure: true,         
       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -116,7 +116,8 @@ export const logout = tryCatch(
 
 export const refreshToken = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies.refreshToken;
+    const token = req.cookies.refreshToken || 
+      req.headers.authorization?.split(" ")[1];
     if (!token)
       return res
         .status(StatusCodes.UNAUTHORIZED)
