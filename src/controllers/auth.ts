@@ -40,8 +40,8 @@ export const login = tryCatch(
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "strict",
+      secure: true,          // ← HTTPS ke liye zaroori
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
