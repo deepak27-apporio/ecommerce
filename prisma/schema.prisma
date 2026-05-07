@@ -98,7 +98,7 @@ model Payment {
   razorpayPaymentId String        @unique
   razorpayOrderId   String
   razorpaySignature String
-  amount            Int
+  amount            Float
   currency          String        @default("INR")
   status            PaymentStatus
   method            String?

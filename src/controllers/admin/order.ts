@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { tryCatch } from "../../middlewares/errorHandler.js";
 import { prisma } from "../../utils/client.js";
 import { StatusCodes } from "../../utils/apiResponse.js";
+import ErrorHandler from "../../utils/errorClass.js";
 
 export const getAllOrders = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -66,6 +67,48 @@ export const getAllOrders = tryCatch(
         hasNextPage: pageNumber < totalPages,
         hasPrevPage: pageNumber > 1,
       },
+    });
+  },
+);
+
+export const updateOrderStatus = tryCatch(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const { status } = req.body;
+    console.log("Updating order", id, "to status", status);
+
+    const order = await prisma.order.findUnique({ where: { id:Number(id) } });
+
+    if (!order)
+      return next(new ErrorHandler("Order not found", StatusCodes.NOT_FOUND));
+
+    if (order.status.toLocaleLowerCase() === "cancelled")
+      return next(
+        new ErrorHandler(
+          "Cannot update a cancelled order",
+          StatusCodes.BAD_REQUEST,
+        ),
+      );
+
+    const updatedOrder = await prisma.order.update({
+      where: { id:Number(id) },
+      data: { status: status.toUpperCase() },
+      include: {
+        items: true,
+        address: true,
+        payment: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      order: updatedOrder,
     });
   },
 );

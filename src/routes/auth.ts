@@ -8,9 +8,10 @@ import {
 import { generateAccessToken, verifyRefreshToken } from "../utils/jwt.js";
 
 const router = Router();
-router.post("/login", validate(loginSchema), login);
-router.post("/register", validate(createUserSchema), register);
-router.post("/refresh", refreshToken);
-router.post("/logout", logout);
+router
+  .post("/login", validate(loginSchema), login)
+  .post("/register", validate(createUserSchema), register)
+  .post("/refresh", refreshToken)
+  .post("/logout", logout);
 
 export default router;

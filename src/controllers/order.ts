@@ -49,6 +49,30 @@ export const CreateOrder = tryCatch(
       );
     }
 
+    await Promise.all(
+      items.map(async (item: any) => {
+        const product = await prisma.product.findUnique({
+          where: { id: item.productId },
+        });
+        if (!product) {
+          throw new ErrorHandler(
+            `Product with ID ${item.productId} not found`,
+            StatusCodes.NOT_FOUND,
+          );
+        } else if (product.stock < item.quantity) {
+          throw new ErrorHandler(
+            `Insufficient stock for product ${product.name}`,
+            StatusCodes.BAD_REQUEST,
+          );
+        } else {
+          await prisma.product.update({
+            where: { id: item.productId },
+            data: { stock: product.stock - item.quantity },
+          });
+        }
+      }),
+    );
+
     const subtotal = items.reduce(
       (sum: number, item: any) => sum + item.price * item.quantity,
       0,
@@ -213,7 +237,7 @@ export const getAllOrders = tryCatch(
     const orders = await prisma.order.findMany({
       where: { userId: req.user.id },
       include: { items: true, address: true },
-      orderBy: { createdAt: "desc" }
+      orderBy: { createdAt: "desc" },
     });
 
     return res.status(StatusCodes.OK).json({

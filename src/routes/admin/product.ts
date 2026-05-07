@@ -13,14 +13,24 @@ import { upload } from "../../middlewares/multer.js";
 
 const router = Router();
 
-router.get("/", getAllProducts);
-router.get("/:id", getProduct);
+router.get("/", getAllProducts).get("/:id", getProduct);
 // router.post("/search/ai-search", aiSearchProducts);
 
 router.use(isAuthenticated, authorizeRoles("admin"));
 
-router.post("/",upload.array("images", 5), validate(createProductSchema), addProduct);
-router.put("/:id",upload.array("images", 5), validate(createProductSchema), updateProduct);
-router.delete("/:id", deleteProduct);
+router
+  .post(
+    "/",
+    upload.array("images", 5),
+    validate(createProductSchema),
+    addProduct,
+  )
+  .put(
+    "/:id",
+    upload.array("images", 5),
+    validate(createProductSchema),
+    updateProduct,
+  )
+  .delete("/:id", deleteProduct);
 
 export default router;

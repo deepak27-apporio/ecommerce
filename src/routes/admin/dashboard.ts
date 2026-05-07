@@ -1,14 +1,11 @@
 import { Router } from "express";
 import { authorizeRoles, isAuthenticated } from "../../middlewares/auth.js";
-import {
-  getAllOrders,
-  updateOrderStatus,
-} from "../../controllers/admin/order.js";
+import { getDashboardDetail } from "../../controllers/admin/dashboard.js";
 
 const router = Router();
 
 router.use(isAuthenticated, authorizeRoles("admin"));
 
-router.get("/", getAllOrders).put("/:id", updateOrderStatus);
+router.get("/", getDashboardDetail);
 
 export default router;

@@ -14,9 +14,10 @@ const router = Router();
 
 router.use(isAuthenticated);
 
-router.post("/create", isAuthenticated, validate(orderSchema), CreateOrder);
-router.post("/verify-payment", isAuthenticated, verifyPayment);
-router.get("/all-orders", isAuthenticated, getAllOrders);
-router.get("/:id", isAuthenticated, getOrderDetailById);
+router
+  .post("/create", isAuthenticated, validate(orderSchema), CreateOrder)
+  .post("/verify-payment", isAuthenticated, verifyPayment)
+  .get("/all-orders", isAuthenticated, getAllOrders)
+  .get("/:id", isAuthenticated, getOrderDetailById);
 
 export default router;

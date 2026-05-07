@@ -8,7 +8,9 @@
     "build": "tsc",
     "watch": "tsc -w",
     "dev": "nodemon dist/server.js",
-    "studio": "prisma studio --port 5555 --browser none"
+    "studio": "prisma studio --port 5555 --browser none",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
   },
   "keywords": [],
   "author": "",

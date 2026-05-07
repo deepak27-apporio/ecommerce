@@ -16,6 +16,9 @@ export const login = tryCatch(
 
     const user = await prisma.user.findUnique({
       where: { email },
+      include: {
+        addresses: true,
+      },
     });
 
     if (!user) {
@@ -51,6 +54,7 @@ export const login = tryCatch(
         name: user.name,
         email: user.email,
         role: user.role,
+        addresses: user.addresses,
       },
     });
   },

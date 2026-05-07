@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.js";
 import orderRoutes from "./routes/order.js";
 import productRoutes from "./routes/admin/product.js";
 import adminOrderRoutes from "./routes/admin/order.js";
+import adminDashboardRoutes from "./routes/admin/dashboard.js";
 import { globalErrorHandler } from "./middlewares/errorHandler.js";
 import dotenv from "dotenv";
 import rateLimit from "express-rate-limit";
@@ -40,6 +41,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/admin/product", productRoutes);
 app.use("/api/admin/order", adminOrderRoutes);
+app.use("/api/admin/dashboard", adminDashboardRoutes);
 
 app.use(globalErrorHandler);
 app.use(

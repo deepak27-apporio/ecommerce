@@ -13,7 +13,7 @@ export const orderSchema = Joi.object({
     city: Joi.string().required(),
     state: Joi.string().required(),
     pincode: Joi.string().required(),
-  }).optional(),
+  }).allow(null).optional(),
 
   items: Joi.array()
     .items(
