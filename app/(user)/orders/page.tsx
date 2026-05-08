@@ -21,21 +21,19 @@ export default function App() {
           transition={{ duration: 0.4 }}
           className="mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4"
         >
-
-          {/* Order count badge — only when orders exist */}
           {orders?.length > 0 && (
             <>
-          <div>
-            <h1 className="text-4xl font-bold mb-2 tracking-tight">
-              Order History
-            </h1>
-            <p className="text-slate-500">
-              Review and manage your previous purchases.
-            </p>
-          </div>
-            <span className="text-xs font-semibold bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full">
-              {orders.length} order{orders.length > 1 ? "s" : ""}
-            </span>
+              <div>
+                <h1 className="text-4xl font-bold mb-2 tracking-tight">
+                  Order History
+                </h1>
+                <p className="text-slate-500">
+                  Review and manage your previous purchases.
+                </p>
+              </div>
+              <span className="text-xs font-semibold bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full">
+                {orders.length} order{orders.length > 1 ? "s" : ""}
+              </span>
             </>
           )}
         </motion.div>

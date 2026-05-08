@@ -3,8 +3,9 @@
 import { getAllOrders } from "@/app/api/admin/orderApi";
 import TableHOC from "@/app/components/admin/TableHOC";
 import OrderActionDropdown from "@/app/components/OrderActionDropdown ";
+import TableSkeleton from "@/app/components/TableSkeleton";
 import { useFetch } from "@/app/hooks/useFetch";
-import { ReactElement, useMemo } from "react";
+import { ReactElement, useMemo, useState } from "react";
 import { Column } from "react-table";
 
 interface DataType {
@@ -28,8 +29,14 @@ const columns: Column<DataType>[] = [
 ];
 
 const Orders = () => {
-  const { data, setData, isLoading } = useFetch(() => getAllOrders(), []);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const { data, isLoading } = useFetch(
+    () => getAllOrders({ page, search }),
+    [page, search],
+  );
   const orders = data?.orders;
+  const pagination = data?.pagination;
 
   const rows = useMemo(
     () =>
@@ -51,19 +58,6 @@ const Orders = () => {
             {order.payment?.status.toLowerCase() || "processing"}
           </span>
         ),
-        // orderstatus: (
-        //   <span
-        //     className={
-        //       order.status.toLowerCase() === "processing"
-        //         ? " text-yellow-500"
-        //         : order.status.toLowerCase() === "shipped"
-        //           ? "text-blue-800"
-        //           : "text-purple-800"
-        //     }
-        //   >
-        //     {order.status.toLowerCase()==="created" ? "confirmed" : order.status.toLowerCase() || "processing"}
-        //   </span>
-        // ),
         action: (
           <OrderActionDropdown
             orderId={order.id}
@@ -79,8 +73,21 @@ const Orders = () => {
     rows,
     "dashboard-product-box",
     "Orders",
-    rows?.length > 6,
+    false,
+    search,
+    setSearch,
+    pagination
+      ? {
+          currentPage: pagination.currentPage,
+          totalPages: pagination.totalPages,
+          totalItems: pagination.totalOrders,
+          hasNextPage: pagination.hasNextPage,
+          hasPrevPage: pagination.hasPrevPage,
+          onPageChange: setPage,
+        }
+      : undefined,
   )();
+  if (isLoading) return <TableSkeleton />;
   return <main>{Table}</main>;
 };
 

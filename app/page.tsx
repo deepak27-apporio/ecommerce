@@ -162,7 +162,7 @@ export default function App() {
                     {product.category}
                   </span>
                   <h3 className="text-lg font-medium text-on-surface">{product.name}</h3>
-                  <p className="text-primary font-bold">${product.price.toFixed(2)}</p>
+                  <p className="text-primary font-bold">₹{product.price.toFixed(2)}</p>
                 </div>
               </motion.div></Link>
             ))}

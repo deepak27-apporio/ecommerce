@@ -60,7 +60,7 @@ function ProductCard({ product }: ProductCardProps) {
             {product.name}
           </h3>
           <p className="text-base text-on-surface-variant font-medium">
-            ${product.price.toFixed(2)}
+            ₹{product.price.toFixed(2)}
           </p>
         </div>
       </motion.div>

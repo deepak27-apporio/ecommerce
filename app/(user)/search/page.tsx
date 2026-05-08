@@ -23,7 +23,6 @@ function SearchPageContent() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200000]);
-  // const [sortBy, setSortBy] = useState<"desc" | "asc" >("desc");
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -142,8 +141,8 @@ function SearchPageContent() {
               products={products}
               currentPage={page}
               onPageChange={setPage}
-            //   sortBy={sortBy}
-            // onSortByChange={setSortBy}
+              //   sortBy={sortBy}
+              // onSortByChange={setSortBy}
             />
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center py-20 gap-3">

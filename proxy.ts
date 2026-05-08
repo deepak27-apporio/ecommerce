@@ -1,4 +1,3 @@
-// middleware.ts (root mein hona chahiye)
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -15,8 +14,6 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  console.log("isauthpage",isAuthPage)
-  console.log("refreshtoken",refreshToken)
   if (isAuthPage && refreshToken) {
     return NextResponse.redirect(new URL("/admin/dashboard", request.url));
   }

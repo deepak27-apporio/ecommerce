@@ -1,6 +1,7 @@
 "use client";
 
-import { ReactNode, useState, useMemo } from "react";
+import { useDebounce } from "@/app/hooks/useDebounce";
+import { ReactNode, useState, useMemo, useEffect } from "react";
 import {
   AiOutlineSortAscending,
   AiOutlineSortDescending,
@@ -9,22 +10,43 @@ import { Column } from "react-table";
 
 type SortState<T> = { key: keyof T; desc: boolean } | null;
 
+interface ServerPagination {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  onPageChange: (page: number) => void;
+}
+
 function TableHOC<T extends object>(
   columns: Column<T>[],
   data: T[],
   containerClassname: string,
   heading: string,
   showPagination: boolean = false,
+  search: string,
+  setSearch: (data: any) => void,
+  serverPagination?: ServerPagination,
 ) {
   return function HOC() {
     const [sort, setSort] = useState<SortState<T>>(null);
     const [pageIndex, setPageIndex] = useState(0);
-    const [search, setSearch] = useState("");
+
+    const [inputValue, setInputValue] = useState(search);
+
+    const debouncedSearch = useDebounce(inputValue, 500);
+
     const pageSize = 10;
 
+    useEffect(() => {
+      setSearch(debouncedSearch);
+      setPageIndex(0);
+    }, [debouncedSearch]);
+
     const filtered = useMemo(() => {
-      if (!search.trim()) return data;
-      return data.filter((row) =>
+      if (!search?.trim()) return data;
+      return data?.filter((row) =>
         Object.values(row as object).some((val) =>
           String(val).toLowerCase().includes(search.toLowerCase()),
         ),
@@ -44,9 +66,10 @@ function TableHOC<T extends object>(
     }, [filtered, sort]);
 
     const pageCount = Math.max(Math.ceil(sortedData?.length / pageSize), 1);
-    const page = showPagination
-      ? sortedData.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize)
-      : sortedData;
+    const page =
+      showPagination && !serverPagination
+        ? sortedData.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize)
+        : sortedData;
 
     const changeSort = (key: keyof T) => {
       setSort((cur) =>
@@ -61,24 +84,22 @@ function TableHOC<T extends object>(
       Delivered: "bg-green-100 text-green-800",
       Cancelled: "bg-red-100 text-red-800",
     };
+
     return (
       <div className={containerClassname}>
-        {/* Toolbar */}
         <div className="flex items-center gap-3 mb-4 flex-wrap">
           <h2 className="text-lg font-medium flex-1">{heading}</h2>
           <input
             type="text"
             placeholder="Search..."
-            value={search}
+            value={inputValue}              
             onChange={(e) => {
-              setSearch(e.target.value);
-              setPageIndex(0);
+              setInputValue(e.target.value);
             }}
             className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-gray-400 w-56"
           />
         </div>
 
-        {/* Table */}
         <div className="border border-gray-100 rounded-xl overflow-auto">
           <table className="w-full text-sm border-collapse">
             <thead>
@@ -117,19 +138,13 @@ function TableHOC<T extends object>(
             <tbody>
               {page?.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={columns.length}
-                    className="text-center py-12 text-gray-400"
-                  >
-                    No orders found
+                  <td colSpan={columns.length} className="text-center py-12 text-gray-400">
+                    No data found
                   </td>
                 </tr>
               ) : (
                 page?.map((row, rowIndex) => (
-                  <tr
-                    key={rowIndex}
-                    className="border-b border-gray-50 hover:bg-gray-50 transition-colors"
-                  >
+                  <tr key={rowIndex} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                     {columns?.map((column) => {
                       const key = column.accessor as keyof T;
                       const value = row[key];
@@ -137,9 +152,7 @@ function TableHOC<T extends object>(
                       return (
                         <td key={String(key)} className="px-4 py-3">
                           {isStatus ? (
-                            <span
-                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[String(value)] ?? "bg-gray-100 text-gray-700"}`}
-                            >
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[String(value)] ?? "bg-gray-100 text-gray-700"}`}>
                               {String(value)}
                             </span>
                           ) : (
@@ -154,13 +167,38 @@ function TableHOC<T extends object>(
             </tbody>
           </table>
 
-          {/* Pagination */}
-          {showPagination && (
+          {serverPagination && (
+            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
+              <span className="text-xs text-gray-400">
+                Page {serverPagination.currentPage} of {serverPagination.totalPages} — {serverPagination.totalItems} total
+              </span>
+              <div className="flex gap-2">
+                <button
+                  disabled={!serverPagination.hasPrevPage}
+                  onClick={() => serverPagination.onPageChange(serverPagination.currentPage - 1)}
+                  className="px-3 py-1.5 text-xs border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-50"
+                >
+                  Prev
+                </button>
+                <span className="px-3 py-1.5 text-xs text-gray-500">
+                  {serverPagination.currentPage} / {serverPagination.totalPages}
+                </span>
+                <button
+                  disabled={!serverPagination.hasNextPage}
+                  onClick={() => serverPagination.onPageChange(serverPagination.currentPage + 1)}
+                  className="px-3 py-1.5 text-xs border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-50"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+
+          {showPagination && !serverPagination && (
             <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
               <span className="text-xs text-gray-400">
                 {pageIndex * pageSize + 1}–
-                {Math.min(pageIndex * pageSize + pageSize, sortedData.length)}{" "}
-                of {sortedData.length} orders
+                {Math.min(pageIndex * pageSize + pageSize, sortedData.length)} of {sortedData.length}
               </span>
               <div className="flex gap-2">
                 <button
@@ -175,9 +213,7 @@ function TableHOC<T extends object>(
                 </span>
                 <button
                   disabled={pageIndex + 1 >= pageCount}
-                  onClick={() =>
-                    setPageIndex((c) => Math.min(c + 1, pageCount - 1))
-                  }
+                  onClick={() => setPageIndex((c) => Math.min(c + 1, pageCount - 1))}
                   className="px-3 py-1.5 text-xs border border-gray-200 rounded-lg disabled:opacity-40 hover:bg-gray-50"
                 >
                   Next

@@ -13,6 +13,7 @@ export interface ProductQueryParams {
 
 export const getAllOrders = async (params?: ProductQueryParams) => {
   try {
+    console.log(params)
     const res = await api.get("/admin/order", { params });
     return res.data;
   } catch (error: any) {

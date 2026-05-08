@@ -9,8 +9,8 @@ interface UseFetchResult<T> {
 }
 
 export function useFetch<T>(
-  fetcher: () => Promise<T>, 
-  deps: any[] = []      
+  fetcher: () => Promise<T>,
+  deps: any[] = [],
 ): UseFetchResult<T> {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(true);

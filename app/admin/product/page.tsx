@@ -3,6 +3,7 @@
 import { getAllProducts } from "@/app/api/admin/productApi";
 import TableHOC from "@/app/components/admin/TableHOC";
 import TableSkeleton from "@/app/components/TableSkeleton";
+import { useFetch } from "@/app/hooks/useFetch";
 
 import Link from "next/link";
 import { ReactElement, useEffect, useMemo, useState } from "react";
@@ -26,28 +27,19 @@ const columns: Column<DataType>[] = [
 ];
 
 const Products = () => {
-  const [loading, setLoading] = useState(true);
-  const [productsList, setProductsList] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      try {
-        const res = await getAllProducts();
-        if (res?.success) {
-          setProductsList(res.data || []);
-        }
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
+  const { data, setData, isLoading } = useFetch(
+    () => getAllProducts({ page, search }),
+    [page, search],
+  );
+  const productsList = data?.data;
+  const pagination = data?.pagination;
 
   const rows = useMemo<DataType[]>(
     () =>
-      productsList.map((product: any) => ({
+      productsList?.map((product: any) => ({
         photo: (
           <img
             src={
@@ -79,10 +71,22 @@ const Products = () => {
     rows,
     "dashboard-product-box",
     "Products",
-    rows?.length > 6,
+    false,
+    search,
+    setSearch,
+    pagination
+      ? {
+          currentPage: pagination.currentPage,
+          totalPages: pagination.totalPages,
+          totalItems: pagination.totalOrders,
+          hasNextPage: pagination.hasNextPage,
+          hasPrevPage: pagination.hasPrevPage,
+          onPageChange: setPage,
+        }
+      : undefined,
   )();
 
-  if (loading) return <TableSkeleton />;
+  if (isLoading) return <TableSkeleton />;
 
   return (
     <>
