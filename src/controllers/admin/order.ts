@@ -23,7 +23,7 @@ export const getAllOrders = tryCatch(
       ...(status && { status }),
       ...(search && {
         OR: [
-          { id: { contains: search, mode: "insensitive" } },
+          ...(!isNaN(parseInt(search)) ? [{ id: parseInt(search) }] : []),
           { razorpayOrderId: { contains: search, mode: "insensitive" } },
           { user: { name: { contains: search, mode: "insensitive" } } },
           { user: { email: { contains: search, mode: "insensitive" } } },

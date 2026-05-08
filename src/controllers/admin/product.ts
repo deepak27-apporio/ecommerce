@@ -148,6 +148,42 @@ export const updateProduct = tryCatch(
   },
 );
 
+export const updateProductStatus = tryCatch(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const productId = Number(id);
+
+    if (isNaN(productId)) {
+      return next(
+        new ErrorHandler("Invalid product ID", StatusCodes.BAD_REQUEST),
+      );
+    }
+
+    const { status } = req.body;
+
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+    });
+
+    if (!product) {
+      return next(new ErrorHandler("Product not found", StatusCodes.NOT_FOUND));
+    }
+
+    const updatedProduct = await prisma.product.update({
+      where: { id: productId },
+      data: {
+        isActive: status,
+      },
+    });
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      message: "Product updated successfully",
+      data: updatedProduct,
+    });
+  },
+);
+
 export const deleteProduct = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
@@ -180,8 +216,13 @@ export const getProduct = tryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
+    const isAdmin = req.user?.role === "admin";
+
     const product = await prisma.product.findUnique({
-      where: { id: Number(id) },
+      where: {
+        id: Number(id),
+        ...(!isAdmin && { isActive: true }),
+      },
       include: { attachments: true },
     });
     if (!product) {
@@ -220,6 +261,12 @@ export const getAllProducts = tryCatch(
       : "createdAt";
 
     const andConditions: any[] = [];
+
+    const isAdmin = req.user?.role === "admin";
+
+    if (!isAdmin) {
+      andConditions.push({ isActive: true });
+    }
 
     if (typeof search === "string" && search.trim() !== "") {
       andConditions.push({
@@ -298,7 +345,6 @@ export const getAllProducts = tryCatch(
 //       return next(new ErrorHandler("Query required", StatusCodes.BAD_REQUEST));
 //     }
 
-//     // ✅ Claude se filters nikalo
 //     const message = await anthropic.messages.create({
 //       model: "claude-sonnet-4-20250514",
 //       max_tokens: 300,
@@ -331,7 +377,7 @@ export const getAllProducts = tryCatch(
 //       filters = { search: query };
 //     }
 
-//     // ✅ Tumhara existing logic same use karo
+//
 //     const limitNum = 20;
 //     const allowedSortFields = ["createdAt", "name", "price"];
 //     const sortField = allowedSortFields.includes(filters.sortBy)

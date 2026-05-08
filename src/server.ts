@@ -4,7 +4,8 @@ import cors from "cors";
 import morgan from "morgan";
 import authRoutes from "./routes/auth.js";
 import orderRoutes from "./routes/order.js";
-import productRoutes from "./routes/admin/product.js";
+import adminProductRoutes from "./routes/admin/product.js";
+import productRoutes from "./routes/product.js";
 import adminOrderRoutes from "./routes/admin/order.js";
 import adminDashboardRoutes from "./routes/admin/dashboard.js";
 import { globalErrorHandler } from "./middlewares/errorHandler.js";
@@ -21,7 +22,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:3000","https://ecommerce-frontend-lpaw.onrender.com"],
+    origin: [
+      "http://localhost:3000",
+      "https://ecommerce-frontend-lpaw.onrender.com",
+    ],
     credentials: true,
   }),
 );
@@ -40,7 +44,8 @@ app.use(
 
 app.use("/api/auth", authRoutes);
 app.use("/api/order", orderRoutes);
-app.use("/api/admin/product", productRoutes);
+app.use("/api/product", productRoutes);
+app.use("/api/admin/product", adminProductRoutes);
 app.use("/api/admin/order", adminOrderRoutes);
 app.use("/api/admin/dashboard", adminDashboardRoutes);
 

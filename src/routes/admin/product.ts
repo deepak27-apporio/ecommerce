@@ -5,6 +5,7 @@ import {
   getAllProducts,
   getProduct,
   updateProduct,
+  updateProductStatus,
 } from "../../controllers/admin/product.js";
 import { authorizeRoles, isAuthenticated } from "../../middlewares/auth.js";
 import { validate } from "../../middlewares/validation.js";
@@ -13,12 +14,13 @@ import { upload } from "../../middlewares/multer.js";
 
 const router = Router();
 
-router.get("/", getAllProducts).get("/:id", getProduct);
 // router.post("/search/ai-search", aiSearchProducts);
 
 router.use(isAuthenticated, authorizeRoles("admin"));
 
 router
+  .get("/", getAllProducts)
+  .get("/:id", getProduct)
   .post(
     "/",
     upload.array("images", 5),
@@ -31,6 +33,7 @@ router
     validate(createProductSchema),
     updateProduct,
   )
+  .patch("/status/:id", updateProductStatus)
   .delete("/:id", deleteProduct);
 
 export default router;
