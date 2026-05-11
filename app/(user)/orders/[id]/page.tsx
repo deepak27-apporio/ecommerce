@@ -5,9 +5,7 @@ import { ORDER_STEPS } from "@/app/types/Constants";
 import { formatDate, getFullImageUrl, getStepIndex } from "@/app/utils/features";
 import {
   ChevronRight,
-  Download,
   Truck,
-  CreditCard,
   MessageCircleQuestion,
 } from "lucide-react";
 import { motion } from "motion/react";
@@ -46,7 +44,7 @@ const page = () => {
               </a>
             </nav>
             <h1 className="text-4xl font-semibold tracking-tight text-slate-900">
-              Order: <span className="">{order?.razorpayOrderId}</span>
+              OrderId: <span className="text-2xl text-slate-500">{order?.razorpayOrderId}</span>
             </h1>
             <p className="text-slate-500 mt-1">Placed on October 24, 2024</p>
           </div>

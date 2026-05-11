@@ -3,7 +3,7 @@
 import TableHOC from "@/app/components/admin/TableHOC";
 import { orders } from "@/app/lib/dummy-data";
 import Link from "next/link";
-import { ReactElement, useMemo } from "react";
+import { ReactElement, useMemo, useState } from "react";
 import { Column } from "react-table";
 
 
@@ -26,6 +26,8 @@ const columns: Column<DataType>[] = [
 ];
 
 const Transaction = () => {
+  const [page, setPage] = useState(1);
+  const [search,setSearch] = useState("")
   const rows = useMemo<DataType[]>(
     () =>
       orders.map((order) => ({
@@ -56,7 +58,9 @@ const Transaction = () => {
     rows,
     "dashboard-product-box",
     "Transactions",
-    rows.length > 6,
+    false,
+    search,
+    setSearch
   )();
 
   return <main>{Table}</main>;

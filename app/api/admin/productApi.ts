@@ -9,9 +9,19 @@ export interface ProductQueryParams {
   maxPrice?: number;
   page?: number;
   limit?: number;
+  aiSearch?:boolean
 }
 
 export const getAllProducts = async (params?: ProductQueryParams) => {
+  try {
+    const res = await api.get("/product", { params });
+    return res.data;
+  } catch (error: any) {
+    throw error?.response?.data;
+  }
+};
+
+export const getAllAdminProducts = async (params?: ProductQueryParams) => {
   try {
     const res = await api.get("/admin/product", { params });
     return res.data;
@@ -37,6 +47,17 @@ export const createProduct = async (data: FormData) => {
 export const updateProduct = async (data: FormData, url: string) => {
   try {
     const res = await api.put(url, data);
+    return res.data;
+  } catch (error: any) {
+    throw error?.response?.data;
+  }
+};
+
+export const updateProductStatus = async (id: number, data: boolean) => {
+  try {
+    const res = await api.patch(`/admin/product/status/${id}`, {
+      status: data,
+    });
     return res.data;
   } catch (error: any) {
     throw error?.response?.data;

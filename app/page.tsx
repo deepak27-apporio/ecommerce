@@ -52,7 +52,6 @@ export default function App() {
           </motion.div>
         </section>
 
-        {/* Categories Bento Grid */}
         <section className="max-w-7xl mx-auto px-gutter my-9">
           <div className="mb-stack-lg">
             <h2 className="text-3xl font-semibold text-on-surface">Curated Essentials</h2>
@@ -60,7 +59,6 @@ export default function App() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 h-auto md:h-[600px]">
-            {/* Main Category */}
             <Link href="search?q=shoes" className="md:col-span-2 lg:col-span-3 relative group overflow-hidden rounded-lg bg-slate-100 h-80 md:h-full">
               <img 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMilZaU2I8w22hQoUslfhJzEAfzvnVQjc8NPX5s5dE0FFOjgXR83ItW0s42r3EpUxqVHdaHZrXRbmzHRGpcsUQnRzpuh7UroORbe2dmk6fL0XszvyyhX-ldIh4czTl2nDU_aJ9gGabcIWkyUjTeoMFagfZtM_m5EouC0YDdqDXrhpHj7WGmL45FAjxmxInu-uf3JMs6lD7ZHKqnK_DkzffNYLIPgwBRBEvJ957Lll-DKP8_AAMwd-A2eKSJrlYBPsBBr4Ou3J1s5wJ" 

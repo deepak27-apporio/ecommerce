@@ -1,12 +1,18 @@
 "use client";
 
-import { getAllProducts } from "@/app/api/admin/productApi";
+import {
+  getAllAdminProducts,
+  getAllProducts,
+  updateProduct,
+  updateProductStatus,
+} from "@/app/api/admin/productApi";
+import ActiveToggle from "@/app/components/ActiveToggle";
 import TableHOC from "@/app/components/admin/TableHOC";
 import TableSkeleton from "@/app/components/TableSkeleton";
 import { useFetch } from "@/app/hooks/useFetch";
 
 import Link from "next/link";
-import { ReactElement, useEffect, useMemo, useState } from "react";
+import { ReactElement, useMemo, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Column } from "react-table";
 
@@ -15,6 +21,7 @@ interface DataType {
   name: string;
   price: string;
   stock: number;
+  active: boolean;
   action: ReactElement;
 }
 
@@ -23,6 +30,7 @@ const columns: Column<DataType>[] = [
   { Header: "Name", accessor: "name" },
   { Header: "Price", accessor: "price" },
   { Header: "Stock", accessor: "stock" },
+  { Header: "Active", accessor: "active" },
   { Header: "Action", accessor: "action" },
 ];
 
@@ -31,7 +39,7 @@ const Products = () => {
   const [search, setSearch] = useState("");
 
   const { data, setData, isLoading } = useFetch(
-    () => getAllProducts({ page, search }),
+    () => getAllAdminProducts({ page, search }),
     [page, search],
   );
   const productsList = data?.data;
@@ -54,6 +62,15 @@ const Products = () => {
         name: product.name,
         price: `Rs ${product.price.toLocaleString("en-IN")}`,
         stock: product.stock,
+        active: (
+          <ActiveToggle
+            productId={product.id}
+            initialActive={product.isActive}
+            onToggle={async (id, newStatus) => {
+              await updateProductStatus(Number(id), newStatus);
+            }}
+          />
+        ),
         action: (
           <Link
             href={`/admin/product/${product.id}`}

@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { getAllProducts, ProductQueryParams } from "../api/admin/productApi";
 import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 export function useProducts(filters: ProductQueryParams = {}) {
   const [products, setProducts] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { search, category, minPrice, maxPrice, page, limit } = filters;
+  const { search, category, minPrice, maxPrice, page, limit,aiSearch } = filters;
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -20,6 +21,7 @@ export function useProducts(filters: ProductQueryParams = {}) {
       if (maxPrice !== undefined) params.maxPrice = maxPrice;
       if (page) params.page = page;
       if (limit) params.limit = limit;
+      params.aiSearch = aiSearch
       const res = await getAllProducts(params);
       setProducts(res);
     } catch (err: any) {

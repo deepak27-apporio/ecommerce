@@ -25,16 +25,17 @@ function SearchPageContent() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200000]);
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(searchInput);
-      setPage(1);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [searchInput]);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setDebouncedSearch(searchInput);
+  //     setPage(1);
+  //   }, 500);
+  //   return () => clearTimeout(timer);
+  // }, [searchInput]);
 
   const filters = {
     search: debouncedSearch || undefined,
+    aiSearch: debouncedSearch ? true : false,
     category:
       selectedCategories.length > 0 ? selectedCategories.join(",") : undefined,
     minPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
@@ -106,22 +107,46 @@ function SearchPageContent() {
           </h1>
 
           <div className="relative mt-8 max-w-xl text-black m-auto">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant pointer-events-none" />
-            <input
-              type="text"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Search products..."
-              className="w-full pl-11 pr-10 py-3 border border-slate-200 bg-white text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all rounded-sm"
-            />
-            {searchInput && (
+            <div className="flex items-center border border-slate-200 bg-white rounded-lg overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-black/10 focus-within:border-black transition-all">
+              {/* Search Icon */}
+              <Search className="ml-4 w-4 h-4 text-gray-400 pointer-events-none shrink-0" />
+
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Search products..."
+                className="flex-1 px-3 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none bg-transparent"
+              />
+
+              {searchInput && (
+                <button
+                  onClick={() => setSearchInput("")}
+                  className="text-gray-400 hover:text-gray-700 text-lg leading-none px-2"
+                >
+                  ×
+                </button>
+              )}
+
               <button
-                onClick={() => setSearchInput("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface text-lg leading-none"
+                onClick={() => setDebouncedSearch(searchInput)}
+                disabled={!searchInput}
+                className="
+                    flex items-center gap-1.5
+                    bg-black text-white text-xs font-semibold tracking-wide
+                    px-4 py-2 m-1.5 rounded-md
+                    hover:bg-gray-800
+                    disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-black
+                    active:scale-[0.97]
+                    transition-all duration-150
+                    shrink-0
+                    select-none
+                  "
               >
-                ×
+                <Search className="w-3 h-3" />
+                Search
               </button>
-            )}
+            </div>
           </div>
         </motion.div>
 

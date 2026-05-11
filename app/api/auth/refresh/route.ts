@@ -29,15 +29,6 @@ export async function GET(request: NextRequest) {
       accessToken: data.accessToken,
     });
 
-    // if (data.refreshToken) {
-    //   response.cookies.set("refreshToken", data.refreshToken, {
-    //     httpOnly: true,
-    //     secure: true,
-    //     sameSite: "lax",
-    //     path: "/",
-    //   });
-    // }
-
     return response;
   } catch (err) {
     return NextResponse.json(
