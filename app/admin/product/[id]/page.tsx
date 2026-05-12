@@ -20,6 +20,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import {
   deleteProduct,
+  getProductAdminById,
   getProductById,
   updateProduct,
 } from "@/app/api/admin/productApi";
@@ -114,7 +115,7 @@ const ProductManagement = () => {
       try {
         setLoading(true);
         setFetchError("");
-        const res = await getProductById(id);
+        const res = await getProductAdminById(id);
         const loadedProduct: Product = res.data ?? res;
         const attachments = loadedProduct.attachments ?? [];
         setProduct(loadedProduct);
@@ -654,7 +655,7 @@ const ProductManagement = () => {
                               </button>
                             ) : (
                               <label className="text-slate-400 hover:text-slate-700 p-1 cursor-pointer transition-colors">
-                                <FaPen className="text-xs" />
+                                {/* <FaPen className="text-xs" /> */}
                                 <input
                                   accept="image/*"
                                   className="sr-only"

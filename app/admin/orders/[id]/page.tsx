@@ -7,6 +7,8 @@ import {
   ChevronRight,
   Truck,
   MessageCircleQuestion,
+  Backpack,
+  ArrowLeft,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useParams, useRouter } from "next/navigation";
@@ -19,7 +21,7 @@ const page = () => {
     [id],
   );
   const order = orderDetails?.order;
-  const activeIndex = getStepIndex(order?.status);
+  const activeIndex = getStepIndex(order?.status); 
   const progressPercent = (activeIndex / (ORDER_STEPS.length - 1)) * 100;
   return (
     <div className="min-h-screen bg-brand-background selection:bg-indigo-100 selection:text-indigo-900">
@@ -33,15 +35,16 @@ const page = () => {
           <div>
             <nav className="flex items-center gap-2 mb-2 text-slate-400 text-xs font-medium uppercase tracking-wider">
               <div 
-                onClick={() => Router.push("/orders")}
-                className="hover:text-indigo-600 transition-colors cursor-pointer"
+                onClick={() => Router.push("/admin/orders")}
+                className="hover:text-indigo-600 transition-colors cursor-pointer flex"
               >
-                View All
+                <ArrowLeft />
+                <span className="mt-1">Back</span>
               </div>
-              <ChevronRight size={12} />
+              {/* <ChevronRight size={12} />
               <a className="hover:text-indigo-600 transition-colors" href="#">
                 Order History
-              </a>
+              </a> */}
             </nav>
             <h1 className="text-4xl font-semibold tracking-tight text-slate-900">
               OrderId: <span className="text-2xl text-slate-500">{order?.razorpayOrderId}</span>
@@ -60,10 +63,8 @@ const page = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Column: Status & Items */}
           <div className="lg:col-span-8 space-y-6">
-            {/* Status Banner & Tracker */}
-            <motion.section
+            {/* <motion.section
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
@@ -86,12 +87,9 @@ const page = () => {
                 <Truck size={36} className="text-indigo-600" />
               </div>
 
-              {/* Timeline Tracker */}
               <div className="relative pt-4 pb-2">
-                {/* Background line */}
                 <div className="absolute top-6 left-0 w-full h-[2px] bg-slate-200"></div>
 
-                {/* Animated progress line */}
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${progressPercent}%` }}
@@ -99,7 +97,6 @@ const page = () => {
                   className="absolute top-6 left-0 h-[2px] bg-indigo-600"
                 ></motion.div>
 
-                {/* Status points */}
                 <div className="relative flex justify-between">
                   {ORDER_STEPS.map((step, index) => {
                     const isActive = index <= activeIndex;
@@ -117,13 +114,13 @@ const page = () => {
                   })}
                 </div>
               </div>
-            </motion.section>
+            </motion.section> */}
 
             {/* Itemized List */}
             <section className="border border-slate-100 rounded-sm overflow-hidden bg-white">
               <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
                 <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-                  Order Items ({order?.items?.length})
+                  Order Items {order?.items?.length}
                 </h3>
               </div>
               <div className="divide-y divide-slate-100">

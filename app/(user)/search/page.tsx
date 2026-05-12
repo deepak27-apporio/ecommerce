@@ -121,7 +121,7 @@ function SearchPageContent() {
 
               {searchInput && (
                 <button
-                  onClick={() => setSearchInput("")}
+                  onClick={clearFilters}
                   className="text-gray-400 hover:text-gray-700 text-lg leading-none px-2"
                 >
                   ×

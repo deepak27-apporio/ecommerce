@@ -64,9 +64,17 @@ export const updateProductStatus = async (id: number, data: boolean) => {
   }
 };
 
-export const getProductById = async (id: string) => {
+export const getProductAdminById = async (id: string) => {
   try {
     const res = await api.get(`/admin/product/${id}`);
+    return res.data;
+  } catch (error: any) {
+    throw error?.response?.data;
+  }
+};
+export const getProductById = async (id: string) => {
+  try {
+    const res = await api.get(`/product/${id}`);
     return res.data;
   } catch (error: any) {
     throw error?.response?.data;

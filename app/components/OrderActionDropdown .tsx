@@ -175,7 +175,7 @@ const OrderActionDropdown = ({ orderId, currentStatus }: Props) => {
           {/* Divider + View Detail */}
           <div className="border-t border-gray-100">
             <a
-              href={`/admin/transaction/${orderId}`}
+              href={`/admin/orders/${orderId}`}
               className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-500 hover:bg-gray-50 transition-colors"
             >
               <svg

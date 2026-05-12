@@ -35,7 +35,6 @@ export default function LoginPage() {
 
     try {
       const res = await login(data.email, data.password);
-      console.log("res",res)
       if (res.success) {
         router.push("/");
         setState((pre) => ({ ...pre, user: res.user }));
@@ -100,12 +99,12 @@ export default function LoginPage() {
                 <label className="text-sm font-medium text-zinc-300">
                   Password
                 </label>
-                <Link
+                {/* <Link
                   href="/auth/forgot-password"
                   className="text-xs text-indigo-400"
                 >
                   Forgot password?
-                </Link>
+                </Link> */}
               </div>
 
               <div className="relative">
