@@ -22,7 +22,7 @@ export const getDashboardDetail = tryCatch(
       prisma.user.count(),
       prisma.user.count({ where: { gender: "male" } }),
       prisma.user.count({ where: { gender: "female" } }),
-      prisma.product.groupBy({          // ✅
+      prisma.product.groupBy({         
         by: ["category"],
         _sum: { stock: true },
         _count: { id: true },

@@ -17,7 +17,6 @@ export interface CloudinaryCredentials {
 }
 
 export interface LocalCredentials {
-  // No credentials needed — optional future fields go here
 }
 
 export type StorageCredentials = CloudinaryCredentials | LocalCredentials;

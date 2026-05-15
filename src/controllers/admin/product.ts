@@ -4,6 +4,7 @@ import ErrorHandler from "../../utils/errorClass.js";
 import { storage } from "../../utils/storage.js";
 import { tryCatch } from "../../middlewares/errorHandler.js";
 import { StatusCodes } from "../../utils/apiResponse.js";
+import { aiSearch } from "../../ai/ai-search.js";
 // import Anthropic from "@anthropic-ai/sdk";
 
 export const addProduct = tryCatch(
@@ -247,14 +248,24 @@ export const getAllProducts = tryCatch(
       category = "",
       minPrice,
       maxPrice,
+      aiSearch: isAiSearch,
     } = req.query;
+
+    if (isAiSearch === "true" && typeof search === "string" && search.trim()) {
+      const result = await aiSearch(search);
+      return res.status(StatusCodes.OK).json({
+        success: true,
+        data: result.products,
+        message: result.message,
+        pagination: null,
+      });
+    }
 
     const pageNum = Math.max(1, Number(page) || 1);
     const limitNum = Math.min(50, Math.max(1, Number(limit) || 10));
     const skip = (pageNum - 1) * limitNum;
 
     const sortOrder = order === "asc" ? "asc" : "desc";
-
     const allowedSortFields = ["createdAt", "name", "price"];
     const sortField = allowedSortFields.includes(sortBy as string)
       ? (sortBy as string)
@@ -263,7 +274,6 @@ export const getAllProducts = tryCatch(
     const andConditions: any[] = [];
 
     const isAdmin = req.user?.role === "admin";
-
     if (!isAdmin) {
       andConditions.push({ isActive: true });
     }
@@ -283,25 +293,18 @@ export const getAllProducts = tryCatch(
         .split(",")
         .map((c) => c.trim())
         .filter(Boolean);
-
       andConditions.push({
-        category: {
-          in: categories,
-          mode: "insensitive",
-        },
+        category: { in: categories, mode: "insensitive" },
       });
     }
 
     const priceFilter: any = {};
-    if (minPrice !== undefined && !isNaN(Number(minPrice))) {
+    if (minPrice !== undefined && !isNaN(Number(minPrice)))
       priceFilter.gte = Number(minPrice);
-    }
-    if (maxPrice !== undefined && !isNaN(Number(maxPrice))) {
+    if (maxPrice !== undefined && !isNaN(Number(maxPrice)))
       priceFilter.lte = Number(maxPrice);
-    }
-    if (Object.keys(priceFilter).length > 0) {
+    if (Object.keys(priceFilter).length > 0)
       andConditions.push({ price: priceFilter });
-    }
 
     const filter = andConditions.length > 0 ? { AND: andConditions } : {};
 
@@ -333,114 +336,15 @@ export const getAllProducts = tryCatch(
   },
 );
 
-// const anthropic = new Anthropic({
-//   apiKey: process.env.ANTHROPIC_API_KEY!,
-// });
+export const getAllProductsByMcp = tryCatch(
+  async (req: Request, res: Response) => {
+    const { query } = req.query;
+    if (!query) {
+      return res.status(400).json({ error: "Query is required" });
+    }
 
-// export const aiSearchProducts = tryCatch(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const { query } = req.body;
+    const result = await aiSearch(query as string);
 
-//     if (!query?.trim()) {
-//       return next(new ErrorHandler("Query required", StatusCodes.BAD_REQUEST));
-//     }
-
-//     const message = await anthropic.messages.create({
-//       model: "claude-sonnet-4-20250514",
-//       max_tokens: 300,
-//       messages: [{
-//         role: "user",
-//         content: `You are a search filter extractor for an ecommerce store.
-// Extract filters from: "${query}"
-
-// Available categories: electronics, headphones, jeans, shoes, clothing, mobiles, laptops
-
-// Return ONLY valid JSON, no extra text:
-// {
-//   "search": "keyword or empty string",
-//   "category": "category name or empty string",
-//   "minPrice": null or number,
-//   "maxPrice": null or number,
-//   "sortBy": "createdAt",
-//   "order": "desc"
-// }`,
-//       }],
-//     });
-
-//     // ✅ Parse Claude response
-//     let filters: any = { search: query };
-//     try {
-//       const text = message.content[0].type === "text"
-//         ? message.content[0].text : "{}";
-//       filters = JSON.parse(text.replace(/```json|```/g, "").trim());
-//     } catch {
-//       filters = { search: query };
-//     }
-
-//
-//     const limitNum = 20;
-//     const allowedSortFields = ["createdAt", "name", "price"];
-//     const sortField = allowedSortFields.includes(filters.sortBy)
-//       ? filters.sortBy : "createdAt";
-//     const sortOrder = filters.order === "asc" ? "asc" : "desc";
-
-//     const andConditions: any[] = [];
-
-//     if (filters.search?.trim()) {
-//       andConditions.push({
-//         OR: [
-//           { name: { contains: filters.search, mode: "insensitive" } },
-//           { description: { contains: filters.search, mode: "insensitive" } },
-//           { category: { contains: filters.search, mode: "insensitive" } },
-//         ],
-//       });
-//     }
-
-//     if (filters.category?.trim()) {
-//       const categories = filters.category
-//         .split(",").map((c: string) => c.trim()).filter(Boolean);
-//       andConditions.push({
-//         OR: categories.map((cat: string) => ({
-//           category: { equals: cat, mode: "insensitive" },
-//         })),
-//       });
-//     }
-
-//     const priceFilter: any = {};
-//     if (filters.minPrice != null && !isNaN(Number(filters.minPrice))) {
-//       priceFilter.gte = Number(filters.minPrice);
-//     }
-//     if (filters.maxPrice != null && !isNaN(Number(filters.maxPrice))) {
-//       priceFilter.lte = Number(filters.maxPrice);
-//     }
-//     if (Object.keys(priceFilter).length > 0) {
-//       andConditions.push({ price: priceFilter });
-//     }
-
-//     const where = andConditions.length > 0 ? { AND: andConditions } : {};
-
-//     const [products, total] = await Promise.all([
-//       prisma.product.findMany({
-//         where,
-//         include: { attachments: true },
-//         orderBy: { [sortField]: sortOrder },
-//         take: limitNum,
-//       }),
-//       prisma.product.count({ where }),
-//     ]);
-
-//     return res.status(StatusCodes.OK).json({
-//       success: true,
-//       data: products,
-//       filters, // ← frontend ko dikhao kya samjha Claude ne
-//       pagination: {
-//         total,
-//         page: 1,
-//         limit: limitNum,
-//         totalPages: Math.ceil(total / limitNum),
-//         hasNextPage: false,
-//         hasPrevPage: false,
-//       },
-//     });
-//   }
-// );
+    return res.json({ success: true, data: result });
+  },
+);
