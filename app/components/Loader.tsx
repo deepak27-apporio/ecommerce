@@ -1,10 +1,13 @@
-const Loader = () => {
-  return (
-    <section className="loader">
-      <div></div>
-    </section>
-  );
+type SpinnerProps = {
+  size?: number;
+  color?: string;
 };
+const Loader = ({ size = 36, color = "border-t-gray-900" }: SpinnerProps) => (
+  <div
+    style={{ width: size, height: size }}
+    className={`border-2 border-gray-200 ${color} rounded-full animate-spin`}
+  />
+);
 
 export const LoaderLayout = () => {
   return (

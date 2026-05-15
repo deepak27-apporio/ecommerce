@@ -9,6 +9,7 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
+
 import { DecryptData } from "../utils/EncryptDecrypt";
 import { Address } from "../types/types";
 
@@ -22,6 +23,7 @@ export type User = {
 
 interface AuthState {
   user: User | null;
+  loading: boolean;
 }
 
 interface AuthContextType extends AuthState {
@@ -31,19 +33,24 @@ interface AuthContextType extends AuthState {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [state, setState] = useState<AuthState>({ user: null });
+  const [state, setState] = useState<AuthState>({
+    user: null,
+    loading: true,
+  });
 
   useEffect(() => {
     try {
       const user = DecryptData("user") || null;
-      console.log("Decrypted user from localStorage:", user);
-      if (user) {
-        setState({ user: user });
-      } else {
-        setState((s) => ({ ...s }));
-      }
+
+      setState({
+        user,
+        loading: false,
+      });
     } catch {
-      setState((s) => ({ ...s }));
+      setState({
+        user: null,
+        loading: false,
+      });
     }
   }, []);
 
@@ -60,7 +67,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useAuth = (): AuthContextType => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  const ctx = useContext(AuthContext);      
+
+  if (!ctx) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+
   return ctx;
 };
